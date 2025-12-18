@@ -39,7 +39,10 @@ I wanted to be able to understand how the Cloud Native Application Bundle specif
 ### Specification Properties:
 I wanted to flatten and understand all the properties of the Cloud Native Application Bundle specification.
 
-```Actions, Additionals, All, ANIs, Applies, Arrays, Booleans, Bundles, Claims, Comments, Components, Constants, Contains, Contents, Created, Credentials, Customs, Defaults, Definitions, Dependencies, Descriptions, Destinations, Digests, Elses, Emails, Encodings, Enums, Environments, Examples, Exclusives, Extensions, Formats, IDs, If, Images, Installations, Integers, Invocations, Items, Keywords, Labels, Lengths, Licenses, Maintainers, Mappings, Maximums, Medias, Messages, Metas, Mins, Minimums, Multiples, Names, Negatives, Nons, Nots, Objects, Ofs, Ones, Outputs, Parameters, Paths, Patterns, Prereleases, Priorities, Properties, Ranges, Reads, References, Relocations, Requireds, Requires, Results, Revisions, Schemas, Sequences, Simples, Sizes, Sources, Statuses, Strings, Thens, Titles, Tos, Types, Uniques, Unknowns, Urls, Versions
+```
+
+Actions, Additionals, All, ANIs, Applies, Arrays, Booleans, Bundles, Claims, Comments, Components, Constants, Contains, Contents, Created, Credentials, Customs, Defaults, Definitions, Dependencies, Descriptions, Destinations, Digests, Elses, Emails, Encodings, Enums, Environments, Examples, Exclusives, Extensions, Formats, IDs, If, Images, Installations, Integers, Invocations, Items, Keywords, Labels, Lengths, Licenses, Maintainers, Mappings, Maximums, Medias, Messages, Metas, Mins, Minimums, Multiples, Names, Negatives, Nons, Nots, Objects, Ofs, Ones, Outputs, Parameters, Paths, Patterns, Prereleases, Priorities, Properties, Ranges, Reads, References, Relocations, Requireds, Requires, Results, Revisions, Schemas, Sequences, Simples, Sizes, Sources, Statuses, Strings, Thens, Titles, Tos, Types, Uniques, Unknowns, Urls, Versions
+
 ```
 
 ## Open Component Model
@@ -70,7 +73,10 @@ I wanted to be able to understand how the Open Component Model specification ope
 ### Specification Properties:
 I wanted to flatten and understand all the properties of the Open Component Model specification.
 
-```Access, Algorithms, All, Artifacts, Arrays, Bases, Blobs, Booleans, Commits, Components, Configurations, Context, Creations, Defaults, Definitions, Digests, Elements, Extras, Files, File Systems, Generics, Githubs, Hashes, HTTP, Identities, Images, Inputs, Keys, Labels, Locals, Mappings, Media, Merges, Metas, Names, Nested, Nones, Normalisations, Nulls, Numbers, Objects, OCIs, Of, Providers, References, Relations, Relaxed, Repos, Repositories, Resources, Schemas, Selectors, Semvers, Signatures, Signings, Sizes, Sources, Specifcations, Sources, Strings, Times, Types, Unknowns, URLs, Values, Versions
+```
+
+Access, Algorithms, All, Artifacts, Arrays, Bases, Blobs, Booleans, Commits, Components, Configurations, Context, Creations, Defaults, Definitions, Digests, Elements, Extras, Files, File Systems, Generics, Githubs, Hashes, HTTP, Identities, Images, Inputs, Keys, Labels, Locals, Mappings, Media, Merges, Metas, Names, Nested, Nones, Normalisations, Nulls, Numbers, Objects, OCIs, Of, Providers, References, Relations, Relaxed, Repos, Repositories, Resources, Schemas, Selectors, Semvers, Signatures, Signings, Sizes, Sources, Specifcations, Sources, Strings, Times, Types, Unknowns, URLs, Values, Versions
+
 ```
 
 ## Open Resource Discovery
