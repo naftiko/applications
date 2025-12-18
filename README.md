@@ -39,11 +39,95 @@ I wanted to be able to understand how the Cloud Native Application Bundle specif
 ### Specification Properties:
 I wanted to flatten and understand all the properties of the Cloud Native Application Bundle specification.
 
-```
-
-Actions, Additionals, All, ANIs, Applies, Arrays, Booleans, Bundles, Claims, Comments, Components, Constants, Contains, Contents, Created, Credentials, Customs, Defaults, Definitions, Dependencies, Descriptions, Destinations, Digests, Elses, Emails, Encodings, Enums, Environments, Examples, Exclusives, Extensions, Formats, IDs, If, Images, Installations, Integers, Invocations, Items, Keywords, Labels, Lengths, Licenses, Maintainers, Mappings, Maximums, Medias, Messages, Metas, Mins, Minimums, Multiples, Names, Negatives, Nons, Nots, Objects, Ofs, Ones, Outputs, Parameters, Paths, Patterns, Prereleases, Priorities, Properties, Ranges, Reads, References, Relocations, Requireds, Requires, Results, Revisions, Schemas, Sequences, Simples, Sizes, Sources, Statuses, Strings, Thens, Titles, Tos, Types, Uniques, Unknowns, Urls, Versions
-
-```
+- AActions
+- Additionals
+- All
+- ANIs
+- Applies
+- Arrays
+- Booleans
+- Bundles
+- Claims
+- Comments
+- Components
+- Constants
+- Contains
+- Contents
+- Created
+- Credentials
+- Customs
+- Defaults
+- Definitions
+- Dependencies
+- Descriptions
+- Destinations
+- Digests
+- Elses
+- Emails
+- Encodings
+- Enums
+- Environments
+- Examples
+- Exclusives
+- Extensions
+- Formats
+- IDs
+- If
+- Images
+- Installations
+- Integers
+- Invocations
+- Items
+- Keywords
+- Labels
+- Lengths
+- Licenses
+- Maintainers
+- Mappings
+- Maximums
+- Medias
+- Messages
+- Metas
+- Mins
+- Minimums
+- Multiples
+- Names
+- Negatives
+- Nons
+- Nots
+- Objects
+- Ofs
+- Ones
+- Outputs
+- Parameters
+- Paths
+- Patterns
+- Prereleases
+- Priorities
+- Properties
+- Ranges
+- Reads
+- References
+- Relocations
+- Requireds
+- Requires
+- Results
+- Revisions
+- Schemas
+- Sequences
+- Simples
+- Sizes
+- Sources
+- Statuses
+- Strings
+- Thens
+- Titles
+- Tos
+- Types
+- Uniques
+- Unknowns
+- Urls
+- Versions
 
 ## Open Component Model
 The Open Component Model (OCM) is an open standard that enables teams to describe software artifacts and their lifecycle metadata in a consistent, technology-agnostic way. It’s built to support secure, reliable delivery and deployment of software—across cloud, on-prem, hybrid, and even air-gapped environments.
@@ -73,11 +157,74 @@ I wanted to be able to understand how the Open Component Model specification ope
 ### Specification Properties:
 I wanted to flatten and understand all the properties of the Open Component Model specification.
 
-```
+- Access
+- Algorithms
+- All
+- Artifacts
+- Arrays
+- Bases
+- Blobs
+- Booleans
+- Commits
+- Components
+- Configurations
+- Context
+- Creations
+- Defaults
+- Definitions
+- Digests
+- Elements
+- Extras
+- Files
+- File Systems
+- Generics
+- Githubs
+- Hashes
+- HTTP
+- Identities
+- Images
+- Inputs
+- Keys
+- Labels
+- Locals
+- Mappings
+- Media
+- Merges
+- Metas
+- Names
+- Nested
+- Nones
+- Normalisations
+- Nulls
+- Numbers
+- Objects
+- OCIs
+- Of
+- Providers
+- References
+- Relations
+- Relaxed
+- Repos
+- Repositories
+- Resources
+- Schemas
+- Selectors
+- Semvers
+- Signatures
+- Signings
+- Sizes
+- Sources
+- Specifcations
+- Sources
+- Strings
+- Times
+- Types
+- Unknowns
+- URLs
+- Values
+- Versions
 
-Access, Algorithms, All, Artifacts, Arrays, Bases, Blobs, Booleans, Commits, Components, Configurations, Context, Creations, Defaults, Definitions, Digests, Elements, Extras, Files, File Systems, Generics, Githubs, Hashes, HTTP, Identities, Images, Inputs, Keys, Labels, Locals, Mappings, Media, Merges, Metas, Names, Nested, Nones, Normalisations, Nulls, Numbers, Objects, OCIs, Of, Providers, References, Relations, Relaxed, Repos, Repositories, Resources, Schemas, Selectors, Semvers, Signatures, Signings, Sizes, Sources, Specifcations, Sources, Strings, Times, Types, Unknowns, URLs, Values, Versions
 
-```
 
 ## Open Resource Discovery
 Open Resource Discovery (ORD) is a protocol for application and service metadata publishing and discovery. It serves as a foundation for metadata catalogs and marketplaces while improving integration automation and quality.
@@ -107,9 +254,115 @@ I wanted to be able to understand how the Open Resource Discovery specification 
 ### Specification Properties
 I wanted to flatten and understand all the properties of the Open Resource Discovery specification.
 
-```
-Access, APIs, Aspects, Awares, Bases, Booleans, Bundles, Callbacks, Capabilities, Categories, Changelogs, Compatibles, Consumptions, Correlations, Countries, Credentials, Customs, Datas, Dates, Defaults, Definitions, Dependencies, Deprecations, Described, Descriptions, Directions, Disableds, Discoveries, Documentations, Entities, Entries, Events, Exchanges, Exposeds, Extensibles, Groups, IDs, Implementations, Industries, Infos, Inputs, Instances, Integrations, JSON, Labels, Lasts, Levels, Lifecycles, Lines, Links, Locals, Mandatories, Mappings, Media, Mins, Multiples, Namespaces, Objects, OData, ORDs, Outputs, Packages, Parents, Partners, Parts, Perspectives, Pointers, Policies, Ports, Products, Protocols, Providers, References, Relateds, Relations, Releases, Removals, Resources, Responsibles, Restrictions, Runtimes, Schemas, Selectors, Sets, Shorts, Standards, Statuses, Strategies, Strings, Subsets, Successors, Sunsets, Supports, Supporteds, Systems, Tags, Targets, Titles, Tombstones, Types, Updates, URLs, Usages, Use Cases, Vendors, Versions, Visibilities
-```
+
+- Access
+- APIs
+- Aspects
+- Awares
+- Bases
+- Booleans
+- Bundles
+- Callbacks
+- Capabilities
+- Categories
+- Changelogs
+- Compatibles
+- Consumptions
+- Correlations
+- Countries
+- Credentials
+- Customs
+- Datas
+- Dates
+- Defaults
+- Definitions
+- Dependencies
+- Deprecations
+- Described
+- Descriptions
+- Directions
+- Disableds
+- Discoveries
+- Documentations
+- Entities
+- Entries
+- Events
+- Exchanges
+- Exposeds
+- Extensibles
+- Groups
+- IDs
+- Implementations
+- Industries
+- Infos
+- Inputs
+- Instances
+- Integrations
+- JSON
+- Labels
+- Lasts
+- Levels
+- Lifecycles
+- Lines
+- Links
+- Locals
+- Mandatories
+- Mappings
+- Media
+- Mins
+- Multiples
+- Namespaces
+- Objects
+- OData
+- ORDs
+- Outputs
+- Packages
+- Parents
+- Partners
+- Parts
+- Perspectives
+- Pointers
+- Policies
+- Ports
+- Products
+- Protocols
+- Providers
+- References
+- Relateds
+- Relations
+- Releases
+- Removals
+- Resources
+- Responsibles
+- Restrictions
+- Runtimes
+- Schemas
+- Selectors
+- Sets
+- Shorts
+- Standards
+- Statuses
+- Strategies
+- Strings
+- Subsets
+- Successors
+- Sunsets
+- Supports
+- Supporteds
+- Systems
+- Tags
+- Targets
+- Titles
+- Tombstones
+- Types
+- Updates
+- URLs
+- Usages
+- Use Cases
+- Vendors
+- Versions
+- Visibilities
+
 
 ## Radius
 Radius is an open-source, cloud-native, application platform that enables developers and the operators that support them to define, deploy, and collaborate on cloud-native applications across public clouds and private infrastructure
@@ -146,9 +399,210 @@ I wanted to be able to understand how the Radius specification operates.
 ### Specification Properties
 I wanted to flatten and understand all the properties of the Radius specification.
 
-```
-Accesses, ACLs, Addresses, Aliases, Annotations, Apps, Applications, Args, Arns, Arrays, Auths, Authentications, Awses, Azures, Backends, Bases, Biceps, Blobs, Booleans, Brokers, Caches, Callbacks, Certificates, Clients, Commands, Components, Computes, Configs, Configurations, Connections, Containers, Contexts, Credentials, Ctys, Daprs, Datas, Databases, Defaults, Delays, Destinations, Digests, Directories, Directions, Disables, Disableds, Durations, Elements, Enables, Encodings, Environments, Environments, Ephemerals, Execs, Extenders, Extensions, Failures, Filesystems, Formats, Froms, Fullies, Gateways, Generics, Gets, Git, Graphs, Groups, Headers, Healths, Hosts, Hostnames, Https, Iams, IDs, Identities, Images, Initials, Injects, Instances, Integers, Internals, Irsas, Issuers, JSON, Jwts, Keys, Kinds, Kubernetes, Labels, Livenesses, Lists, Locals, Locations, Manageds, Managedidentities, Manuals, Maximums, Metadatas, Methods, Mins, Minimums, Mongos, Mqs, Mounts, Names, Namespaces, Nexts, Nons, Numbers, Objects, Ocis, Oidcs, Outputs, Pageds, Parameters, Passthroughs, Passwords, Pats, Paths, Periods, Permissions, Persistents, Plains, Planes, Pods, Podspecs, Policies, Ports, Prefixes, Principals, Probes, Properties, Protocols, Providers, Provisionings, Pubsubs, Pulls, Qualifieds, Queues, Rabbits, Rabbitmqs, Radiuses, Readinesses, Recipes, Redundants, Redises, Refs, References, Registries, Replicas, Replaces, Requests, Resources, Responses, Restarts, Results, Roles, Routes, Runtimes, Scalings, Schemas, Schemes, Secrets, Secretstores, Selectors, Servers, Services, Settings, Sidecars, Simulateds, Specs, Sqls, Ssls, States, Statuses, Storages, Stores, Strings, Subs, Summaries, Systems, Tags, Tcps, Templates, Tenants, Terraforms, Thresholds, Timeouts, Tlses, Types, Typs, Updates, Uris, Urls, Usernames, Values, Variables, Versions, Vhosts, Volumes, Websockets, Workings, Workloads
-```
+
+- Accesses
+- ACLs
+- Addresses
+- Aliases
+- Annotations
+- Apps
+- Applications
+- Args
+- Arns
+- Arrays
+- Auths
+- Authentications
+- Awses
+- Azures
+- Backends
+- Bases
+- Biceps
+- Blobs
+- Booleans
+- Brokers
+- Caches
+- Callbacks
+- Certificates
+- Clients
+- Commands
+- Components
+- Computes
+- Configs
+- Configurations
+- Connections
+- Containers
+- Contexts
+- Credentials
+- Ctys
+- Daprs
+- Datas
+- Databases
+- Defaults
+- Delays
+- Destinations
+- Digests
+- Directories
+- Directions
+- Disables
+- Disableds
+- Durations
+- Elements
+- Enables
+- Encodings
+- Environments
+- Environments
+- Ephemerals
+- Execs
+- Extenders
+- Extensions
+- Failures
+- Filesystems
+- Formats
+- Froms
+- Fullies
+- Gateways
+- Generics
+- Gets
+- Git
+- Graphs
+- Groups
+- Headers
+- Healths
+- Hosts
+- Hostnames
+- Https
+- Iams
+- IDs
+- Identities
+- Images
+- Initials
+- Injects
+- Instances
+- Integers
+- Internals
+- Irsas
+- Issuers
+- JSON
+- Jwts
+- Keys
+- Kinds
+- Kubernetes
+- Labels
+- Livenesses
+- Lists
+- Locals
+- Locations
+- Manageds
+- Managedidentities
+- Manuals
+- Maximums
+- Metadatas
+- Methods
+- Mins
+- Minimums
+- Mongos
+- Mqs
+- Mounts
+- Names
+- Namespaces
+- Nexts
+- Nons
+- Numbers
+- Objects
+- Ocis
+- Oidcs
+- Outputs
+- Pageds
+- Parameters
+- Passthroughs
+- Passwords
+- Pats
+- Paths
+- Periods
+- Permissions
+- Persistents
+- Plains
+- Planes
+- Pods
+- Podspecs
+- Policies
+- Ports
+- Prefixes
+- Principals
+- Probes
+- Properties
+- Protocols
+- Providers
+- Provisionings
+- Pubsubs
+- Pulls
+- Qualifieds
+- Queues
+- Rabbits
+- Rabbitmqs
+- Radiuses
+- Readinesses
+- Recipes
+- Redundants
+- Redises
+- Refs
+- References
+- Registries
+- Replicas
+- Replaces
+- Requests
+- Resources
+- Responses
+- Restarts
+- Results
+- Roles
+- Routes
+- Runtimes
+- Scalings
+- Schemas
+- Schemes
+- Secrets
+- Secretstores
+- Selectors
+- Servers
+- Services
+- Settings
+- Sidecars
+- Simulateds
+- Specs
+- Sqls
+- Ssls
+- States
+- Statuses
+- Storages
+- Stores
+- Strings
+- Subs
+- Summaries
+- Systems
+- Tags
+- Tcps
+- Templates
+- Tenants
+- Terraforms
+- Thresholds
+- Timeouts
+- Tlses
+- Types
+- Typs
+- Updates
+- Uris
+- Urls
+- Usernames
+- Values
+- Variables
+- Versions
+- Vhosts
+- Volumes
+- Websockets
+- Workings
+- Workloads
+
 
 ## Score
 Score is a developer-centric and platform-agnostic workload specification. It ensures consistent configuration between local and remote environments.
@@ -181,9 +635,61 @@ I wanted to be able to understand how the Score specification operates.
 ### Specification Properties
 I wanted to flatten and understand all the properties of the Score specification.
 
-```
-Annotations, Apis, Args, Arrays, Binaries, Booleans, Classes, Commands, Containers, Contents, Cpus, Execs, Expands, Files, Gets, Headers, Hosts, Https, IDs, Images, Integers, Limits, Livenesses, Memories, Metadatas, Modes, Names, Nos, Objects, Ofs, Ones, Params, Paths, Ports, Probes, Protocols, Readinesses, Reads, Onlies, Refs, Requests, Resources, Schemes, Services, Sources, Strings, Targets, Types, Unknowns, Values, Variables, Versions, Volumes
-```
+
+- Annotations
+- Apis
+- Args
+- Arrays
+- Binaries
+- Booleans
+- Classes
+- Commands
+- Containers
+- Contents
+- Cpus
+- Execs
+- Expands
+- Files
+- Gets
+- Headers
+- Hosts
+- Https
+- IDs
+- Images
+- Integers
+- Limits
+- Livenesses
+- Memories
+- Metadatas
+- Modes
+- Names
+- Nos
+- Objects
+- Ofs
+- Ones
+- Params
+- Paths
+- Ports
+- Probes
+- Protocols
+- Readinesses
+- Reads
+- Onlies
+- Refs
+- Requests
+- Resources
+- Schemes
+- Services
+- Sources
+- Strings
+- Targets
+- Types
+- Unknowns
+- Values
+- Variables
+- Versions
+- Volumes
+
 
 ---
 
@@ -191,20 +697,154 @@ Annotations, Apis, Args, Arrays, Binaries, Booleans, Classes, Commands, Containe
 Across these five specifications I have begun to aggregate the operational and specification specific properties to better understand the common and overlapping aspects of what these specifications do and how they are managed.
 
 ### Specification Priorities
-These are priorities aggregated across the specifications, identifying the important parts they share within the specifications themselves.
+These are priorities aggregated across the specifications
+- identifying the important parts they share within the specifications themselves.
 
-```
-Annotations, APIs, Arguments, Bases, Bundles, Callbacks, Commands, Components, Configurations, Containers, Content, Context, Credentials, Custom, Data, Defaults, Definitions, Dependencies, Descriptions, Destinations, Digests, Directions, Encodings, Environments, Extensions, File systems, Formats, Generics, Groups, Headers, Hosts, Identifiers, Identities, Images, Inputs, Instances, Keys, Labels, Mappings, Maximums, Media, Metadata, Minimums, Multiples, Namespaces, Outputs, Parameters, Paths, Policies, Ports, Probes, Properties, Protocols, Providers, Readiness, Reads, References, References, Relations, Requests, Resources, Results, Runtimes, Schemes, Schemas, Selectors, Services, Sizes, Sources, Specifications, Statuses, Systems, Tags, Targets, Titles, Types, Updates, Variables, Versions, Volumes
-```
+
+- Annotations
+- APIs
+- Arguments
+- Bases
+- Bundles
+- Callbacks
+- Commands
+- Components
+- Configurations
+- Containers
+- Content
+- Context
+- Credentials
+- Custom
+- Data
+- Defaults
+- Definitions
+- Dependencies
+- Descriptions
+- Destinations
+- Digests
+- Directions
+- Encodings
+- Environments
+- Extensions
+- File systems
+- Formats
+- Generics
+- Groups
+- Headers
+- Hosts
+- Identifiers
+- Identities
+- Images
+- Inputs
+- Instances
+- Keys
+- Labels
+- Mappings
+- Maximums
+- Media
+- Metadata
+- Minimums
+- Multiples
+- Namespaces
+- Outputs
+- Parameters
+- Paths
+- Policies
+- Ports
+- Probes
+- Properties
+- Protocols
+- Providers
+- Readiness
+- Reads
+- References
+- References
+- Relations
+- Requests
+- Resources
+- Results
+- Runtimes
+- Schemes
+- Schemas
+- Selectors
+- Services
+- Sizes
+- Sources
+- Specifications
+- Statuses
+- Systems
+- Tags
+- Targets
+- Titles
+- Types
+- Updates
+- Variables
+- Versions
+- Volumes
+
 
 This provides a top-level vocabulary that could be further used to begin working schema, mapping objects and properties, as well as helping inform a new schema work.
 
 ### Operational Priorities
 These are the operational properties aggregated across all of the specifications, helping understand what is available in aggregate and may be helping drive adoption, or may also contribute to a lack of adoption when missing.
 
-```
-Adopters, API, Blog, Change Log, CLI, CNCF Project, Code of Conduct, Community, Community Meetings, Concepts, Contributing, Contributing Using Gen AI, Default Version, Dev Version, Discord, Documentation, Ecosystem, Emails, Examples, Extensions, FAQ, Getting Started, GitHub Organization, GitHub Repository/Repo, Governance, Guides, Help, Implementations, JSON Schema, License, Linting, Logos, Mailing List, Meeting Notes, OpenAPI, Platform Engineering, Policy Levels, Press, Recipes, Registries, Road Map, Samples, Schema, Security, Slack Channel, Specification, Steering Committee, Threads, Tools, Trademark, Tutorials, Use Cases, Videos, VSCode, Website, YouTube
-```
+
+- Adopters
+- API
+- Blog
+- Change Log
+- CLI
+- CNCF Project
+- Code of Conduct
+- Community
+- Community Meetings
+- Concepts
+- Contributing
+- Contributing Using Gen AI
+- Default Version
+- Dev Version
+- Discord
+- Documentation
+- Ecosystem
+- Emails
+- Examples
+- Extensions
+- FAQ
+- Getting Started
+- GitHub Organization
+- GitHub Repository/Repo
+- Governance
+- Guides
+- Help
+- Implementations
+- JSON Schema
+- License
+- Linting
+- Logos
+- Mailing List
+- Meeting Notes
+- OpenAPI
+- Platform Engineering
+- Policy Levels
+- Press
+- Recipes
+- Registries
+- Road Map
+- Samples
+- Schema
+- Security
+- Slack Channel
+- Specification
+- Steering Committee
+- Threads
+- Tools
+- Trademark
+- Tutorials
+- Use Cases
+- Videos
+- VSCode
+- Website
+- YouTube
 
 This provides a common vocabulary to describe how these projects are operating and investing in their communities, which can be more evenly applied across the specifications as well as any new ones created to augment.
 
