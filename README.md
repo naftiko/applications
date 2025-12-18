@@ -247,13 +247,12 @@ I wanted to be able to understand how the Open Resource Discovery specification 
 - [Change Log](https://github.com/open-resource-discovery/specification/blob/main/CHANGELOG.md)
 - [Code of Conduct](https://github.com/open-resource-discovery/specification/blob/main/CODE_OF_CONDUCT.md)
 - [Contributing](https://github.com/open-resource-discovery/specification/blob/main/CONTRIBUTING.md)
-- [Contributing Using Gen AI](-https://github.com/open-resource-discovery/specification/blob/main/CONTRIBUTING_USING_GENAI.md)
+- [Contributing Using Gen AI](https://github.com/open-resource-discovery/specification/blob/main/CONTRIBUTING_USING_GENAI.md)
 - [License](https://github.com/open-resource-discovery/specification/blob/main/LICENSE)
 - [Steering Committee](https://github.com/open-resource-discovery/steering#readme)
 
 ### Specification Properties
 I wanted to flatten and understand all the properties of the Open Resource Discovery specification.
-
 
 - Access
 - APIs
@@ -363,7 +362,6 @@ I wanted to flatten and understand all the properties of the Open Resource Disco
 - Versions
 - Visibilities
 
-
 ## Radius
 Radius is an open-source, cloud-native, application platform that enables developers and the operators that support them to define, deploy, and collaborate on cloud-native applications across public clouds and private infrastructure
 
@@ -398,7 +396,6 @@ I wanted to be able to understand how the Radius specification operates.
 
 ### Specification Properties
 I wanted to flatten and understand all the properties of the Radius specification.
-
 
 - Accesses
 - ACLs
@@ -603,7 +600,6 @@ I wanted to flatten and understand all the properties of the Radius specificatio
 - Workings
 - Workloads
 
-
 ## Score
 Score is a developer-centric and platform-agnostic workload specification. It ensures consistent configuration between local and remote environments.
 
@@ -634,7 +630,6 @@ I wanted to be able to understand how the Score specification operates.
 
 ### Specification Properties
 I wanted to flatten and understand all the properties of the Score specification.
-
 
 - Annotations
 - Apis
@@ -689,7 +684,6 @@ I wanted to flatten and understand all the properties of the Score specification
 - Variables
 - Versions
 - Volumes
-
 
 ---
 
