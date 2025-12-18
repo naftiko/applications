@@ -691,8 +691,7 @@ I wanted to flatten and understand all the properties of the Score specification
 Across these five specifications I have begun to aggregate the operational and specification specific properties to better understand the common and overlapping aspects of what these specifications do and how they are managed.
 
 ### Specification Priorities
-These are priorities aggregated across the specifications
-- identifying the important parts they share within the specifications themselves.
+These are priorities aggregated across the specifications, identifying the important parts they share within the specifications themselves.
 
 
 - Annotations
