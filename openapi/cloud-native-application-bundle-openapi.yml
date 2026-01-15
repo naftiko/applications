@@ -1,0 +1,1721 @@
+openapi: 3.1.0
+info:
+  title: CNAB Bundle API
+  version: 1.0.0
+  description: |
+    API for managing Cloud Native Application Bundles (CNAB).
+    
+    This API provides endpoints for managing CNAB bundles, claims, claim results,
+    dependencies, parameter sources, relocation mappings, and installation status.
+  contact:
+    name: CNAB Specification
+    url: https://cnab.io
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://staging-api.example.com/v1
+    description: Staging server
+
+tags:
+  - name: Bundles
+    description: Operations for managing CNAB bundle descriptors
+  - name: Claims
+    description: Operations for managing installation claims
+  - name: Claim Results
+    description: Operations for managing claim execution results
+  - name: Status
+    description: Operations for querying installation status
+
+paths:
+  /bundles:
+    get:
+      tags:
+        - Bundles
+      summary: List all bundles
+      operationId: listBundles
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+        - name: keyword
+          in: query
+          description: Filter bundles by keyword
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of bundles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BundleListResponse'
+              examples:
+                bundleList:
+                  $ref: '#/components/examples/BundleListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Bundles
+      summary: Create a new bundle
+      operationId: createBundle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bundle'
+            examples:
+              wordpress:
+                $ref: '#/components/examples/WordPressBundle'
+              cassandra:
+                $ref: '#/components/examples/CassandraBundle'
+              mlInference:
+                $ref: '#/components/examples/MLInferenceBundle'
+      responses:
+        '201':
+          description: Bundle created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bundle'
+              examples:
+                wordpress:
+                  $ref: '#/components/examples/WordPressBundle'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /bundles/{name}:
+    parameters:
+      - $ref: '#/components/parameters/BundleNameParam'
+
+    get:
+      tags:
+        - Bundles
+      summary: Get a bundle by name
+      operationId: getBundle
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '200':
+          description: Bundle details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bundle'
+              examples:
+                wordpress:
+                  $ref: '#/components/examples/WordPressBundle'
+                cassandra:
+                  $ref: '#/components/examples/CassandraBundle'
+                mlInference:
+                  $ref: '#/components/examples/MLInferenceBundle'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      tags:
+        - Bundles
+      summary: Update an existing bundle
+      operationId: updateBundle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bundle'
+            examples:
+              wordpress:
+                $ref: '#/components/examples/WordPressBundle'
+      responses:
+        '200':
+          description: Bundle updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bundle'
+              examples:
+                wordpress:
+                  $ref: '#/components/examples/WordPressBundle'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - Bundles
+      summary: Delete a bundle
+      operationId: deleteBundle
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '204':
+          description: Bundle deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /bundles/{name}/actions/{action}:
+    post:
+      tags:
+        - Bundles
+      summary: Execute a bundle action
+      operationId: executeBundleAction
+      parameters:
+        - $ref: '#/components/parameters/BundleNameParam'
+        - $ref: '#/components/parameters/ActionParam'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionExecutionRequest'
+            examples:
+              installWordPress:
+                $ref: '#/components/examples/ActionExecutionRequest'
+      responses:
+        '202':
+          description: Action accepted for execution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Claim'
+              examples:
+                installClaim:
+                  $ref: '#/components/examples/ClaimInstall'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /claims:
+    get:
+      tags:
+        - Claims
+      summary: List all claims
+      operationId: listClaims
+      parameters:
+        - name: installation
+          in: query
+          description: Filter by installation name
+          schema:
+            type: string
+        - name: action
+          in: query
+          description: Filter by action type
+          schema:
+            type: string
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: List of claims
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClaimListResponse'
+              examples:
+                claimList:
+                  $ref: '#/components/examples/ClaimListResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Claims
+      summary: Create a new claim
+      operationId: createClaim
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Claim'
+            examples:
+              installClaim:
+                $ref: '#/components/examples/ClaimInstall'
+      responses:
+        '201':
+          description: Claim created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Claim'
+              examples:
+                installClaim:
+                  $ref: '#/components/examples/ClaimInstall'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /claims/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ClaimIdParam'
+
+    get:
+      tags:
+        - Claims
+      summary: Get a claim by ID
+      operationId: getClaim
+      responses:
+        '200':
+          description: Claim details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Claim'
+              examples:
+                installClaim:
+                  $ref: '#/components/examples/ClaimInstall'
+                upgradeClaim:
+                  $ref: '#/components/examples/ClaimUpgrade'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /claims/{id}/results:
+    parameters:
+      - $ref: '#/components/parameters/ClaimIdParam'
+
+    get:
+      tags:
+        - Claim Results
+      summary: List results for a claim
+      operationId: listClaimResults
+      responses:
+        '200':
+          description: List of claim results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClaimResultListResponse'
+              examples:
+                resultList:
+                  $ref: '#/components/examples/ClaimResultListResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /results/{id}:
+    get:
+      tags:
+        - Claim Results
+      summary: Get a claim result by ID
+      operationId: getClaimResult
+      parameters:
+        - $ref: '#/components/parameters/ResultIdParam'
+      responses:
+        '200':
+          description: Claim result details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClaimResult'
+              examples:
+                successResult:
+                  $ref: '#/components/examples/ClaimResultSuccess'
+                failedResult:
+                  $ref: '#/components/examples/ClaimResultFailed'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /installations:
+    get:
+      tags:
+        - Status
+      summary: List all installations
+      operationId: listInstallations
+      responses:
+        '200':
+          description: List of installations with status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusListResponse'
+              examples:
+                installationList:
+                  $ref: '#/components/examples/StatusListResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /installations/{name}/status:
+    get:
+      tags:
+        - Status
+      summary: Get installation status
+      operationId: getInstallationStatus
+      parameters:
+        - $ref: '#/components/parameters/InstallationNameParam'
+      responses:
+        '200':
+          description: Installation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+              examples:
+                readyStatus:
+                  $ref: '#/components/examples/StatusReady'
+                pendingStatus:
+                  $ref: '#/components/examples/StatusPending'
+                failedStatus:
+                  $ref: '#/components/examples/StatusFailed'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  parameters:
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+    OffsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+
+    BundleNameParam:
+      name: name
+      in: path
+      required: true
+      description: Bundle name
+      schema:
+        type: string
+
+    VersionQueryParam:
+      name: version
+      in: query
+      description: Specific version to retrieve
+      schema:
+        type: string
+
+    ActionParam:
+      name: action
+      in: path
+      required: true
+      description: Action to execute (install, upgrade, uninstall, or custom action)
+      schema:
+        type: string
+
+    ClaimIdParam:
+      name: id
+      in: path
+      required: true
+      description: Claim ID (ULID)
+      schema:
+        type: string
+
+    ResultIdParam:
+      name: id
+      in: path
+      required: true
+      description: Result ID (ULID)
+      schema:
+        type: string
+
+    InstallationNameParam:
+      name: name
+      in: path
+      required: true
+      description: Installation name
+      schema:
+        type: string
+
+  schemas:
+    # List Response Wrappers
+    BundleListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bundle'
+        total:
+          type: integer
+          description: Total number of bundles
+        limit:
+          type: integer
+          description: Number of items per page
+        offset:
+          type: integer
+          description: Current offset
+
+    ClaimListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Claim'
+        total:
+          type: integer
+          description: Total number of claims
+
+    ClaimResultListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/ClaimResult'
+
+    StatusListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Status'
+
+    # Action Execution
+    ActionExecutionRequest:
+      type: object
+      properties:
+        parameters:
+          type: object
+          description: Parameter values for the action
+          additionalProperties: true
+        credentials:
+          type: object
+          description: Credential values for the action
+          additionalProperties:
+            type: string
+
+    # Core CNAB Schemas
+    Bundle:
+      type: object
+      description: Cloud Native Application Bundle Descriptor (CNAB v1)
+      required:
+        - schemaVersion
+        - name
+        - version
+        - invocationImages
+      properties:
+        schemaVersion:
+          type: string
+          description: The version of the CNAB specification
+          const: v1
+        name:
+          type: string
+          description: The name of this bundle
+          examples:
+            - my-wordpress-bundle
+        version:
+          type: string
+          description: A SemVer2 version for this bundle
+          pattern: ^v?([0-9]+)(\.[0-9]+)?(\.[0-9]+)?(-([0-9A-Za-z\-]+(\.[0-9A-Za-z\-]+)*))?(\+([0-9A-Za-z\-]+(\.[0-9A-Za-z\-]+)*))?$
+          examples:
+            - 1.2.3
+            - 2.0.1-beta.1
+        description:
+          type: string
+          description: A description of this bundle, intended for users
+        keywords:
+          type: array
+          description: A list of keywords describing the bundle
+          items:
+            type: string
+          examples:
+            - - wordpress
+              - blog
+              - cms
+        maintainers:
+          type: array
+          description: A list of parties responsible for this bundle
+          items:
+            $ref: '#/components/schemas/Maintainer'
+        license:
+          type: string
+          description: The SPDX license code or proprietary license name
+          examples:
+            - Apache-2.0
+            - MIT
+        invocationImages:
+          type: array
+          description: The array of invocation image definitions
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InvocationImage'
+        images:
+          type: object
+          description: Images used by this bundle
+          additionalProperties:
+            $ref: '#/components/schemas/Image'
+        credentials:
+          type: object
+          description: Credentials to be injected into the invocation image
+          additionalProperties:
+            $ref: '#/components/schemas/Credential'
+        parameters:
+          type: object
+          description: Parameters that can be injected into the invocation image
+          additionalProperties:
+            $ref: '#/components/schemas/Parameter'
+        definitions:
+          type: object
+          description: JSON Schema definitions for parameters and outputs
+          additionalProperties:
+            $ref: '#/components/schemas/Definition'
+        outputs:
+          type: object
+          description: Values produced by executing the invocation image
+          additionalProperties:
+            $ref: '#/components/schemas/BundleOutput'
+        actions:
+          type: object
+          description: Custom actions that can be triggered on this bundle
+          additionalProperties:
+            $ref: '#/components/schemas/Action'
+        requiredExtensions:
+          type: array
+          description: Extensions required for this bundle
+          items:
+            type: string
+        custom:
+          type: object
+          description: Reserved for custom extensions
+          additionalProperties: true
+
+    Maintainer:
+      type: object
+      description: Information about a bundle maintainer
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the maintainer
+        email:
+          type: string
+          format: email
+          description: Email address of the maintainer
+        url:
+          type: string
+          format: uri
+          description: URL for the maintainer
+
+    InvocationImage:
+      type: object
+      description: A bootstrapping image for the CNAB bundle
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          description: A resolvable reference to the image
+        imageType:
+          type: string
+          description: The type of image
+          default: oci
+        contentDigest:
+          type: string
+          description: A cryptographic hash digest of the image contents
+        size:
+          type: integer
+          description: The image size in bytes
+        mediaType:
+          type: string
+          description: The media type of the image
+        labels:
+          type: object
+          description: Key/value pairs for identifying attributes
+          additionalProperties:
+            type: string
+
+    Image:
+      type: object
+      description: An application image for this CNAB bundle
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          description: A resolvable reference to the image
+        imageType:
+          type: string
+          description: The type of image
+          default: oci
+        description:
+          type: string
+          description: A description of the purpose of this image
+        contentDigest:
+          type: string
+          description: A cryptographic hash digest of the image contents
+        size:
+          type: integer
+          description: The image size in bytes
+        mediaType:
+          type: string
+          description: The media type of the image
+        labels:
+          type: object
+          description: Key/value pairs for identifying attributes
+          additionalProperties:
+            type: string
+
+    Credential:
+      type: object
+      description: Defines a credential and where it should be placed
+      properties:
+        description:
+          type: string
+          description: A user-friendly description of this credential
+        env:
+          type: string
+          description: The environment variable name for this credential
+        path:
+          type: string
+          description: The path inside the invocation image for mounting credentials
+        required:
+          type: boolean
+          description: Indicates whether this credential must be supplied
+          default: false
+        applyTo:
+          type: array
+          description: An optional list of actions handling this credential
+          items:
+            type: string
+
+    Parameter:
+      type: object
+      description: A parameter that can be passed into the invocation image
+      required:
+        - definition
+        - destination
+      properties:
+        definition:
+          type: string
+          description: The name of a definition describing the schema
+        description:
+          type: string
+          description: A user-friendly description of this parameter
+        destination:
+          $ref: '#/components/schemas/ParameterDestination'
+        required:
+          type: boolean
+          description: Indicates whether this parameter must be supplied
+          default: false
+        applyTo:
+          type: array
+          description: An optional list of actions handling this parameter
+          items:
+            type: string
+
+    ParameterDestination:
+      type: object
+      description: Where the parameter value should be placed
+      properties:
+        env:
+          type: string
+          description: The environment variable name for the parameter value
+        path:
+          type: string
+          description: The path inside the invocation image for the parameter
+
+    Definition:
+      type:
+        - object
+        - boolean
+      description: JSON Schema definition for a parameter or output
+      properties:
+        $id:
+          type: string
+          format: uri-reference
+        $schema:
+          type: string
+          format: uri
+        $ref:
+          type: string
+          format: uri-reference
+        $comment:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          oneOf:
+            - $ref: '#/components/schemas/SimpleType'
+            - type: array
+              items:
+                $ref: '#/components/schemas/SimpleType'
+              minItems: 1
+              uniqueItems: true
+        default: true
+        examples:
+          type: array
+        enum:
+          type: array
+          minItems: 1
+          uniqueItems: true
+        const: true
+        format:
+          type: string
+        pattern:
+          type: string
+          format: regex
+        minLength:
+          type: integer
+          minimum: 0
+        maxLength:
+          type: integer
+          minimum: 0
+        minimum:
+          type: integer
+        maximum:
+          type: integer
+        exclusiveMinimum:
+          type: integer
+        exclusiveMaximum:
+          type: integer
+        multipleOf:
+          type: integer
+          exclusiveMinimum: 0
+        minItems:
+          type: integer
+          minimum: 0
+        maxItems:
+          type: integer
+          minimum: 0
+        uniqueItems:
+          type: boolean
+          default: false
+        minProperties:
+          type: integer
+          minimum: 0
+        maxProperties:
+          type: integer
+          minimum: 0
+        required:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Definition'
+        additionalProperties:
+          oneOf:
+            - type: boolean
+            - $ref: '#/components/schemas/Definition'
+        items:
+          oneOf:
+            - $ref: '#/components/schemas/Definition'
+            - type: array
+              items:
+                $ref: '#/components/schemas/Definition'
+              minItems: 1
+
+    SimpleType:
+      type: string
+      enum:
+        - array
+        - boolean
+        - integer
+        - 'null'
+        - number
+        - object
+        - string
+
+    BundleOutput:
+      type: object
+      description: A value produced by running an invocation image
+      required:
+        - definition
+        - path
+      properties:
+        definition:
+          type: string
+          description: The name of a definition describing the schema
+        description:
+          type: string
+          description: A user-friendly description of this output
+        path:
+          type: string
+          description: The path inside the invocation image where output is written
+          pattern: ^/cnab/app/outputs/.+$
+        applyTo:
+          type: array
+          description: An optional list of actions producing this output
+          items:
+            type: string
+
+    Action:
+      type: object
+      description: A custom action that can be triggered on the bundle
+      properties:
+        title:
+          type: string
+          description: A human-readable name for this action
+        description:
+          type: string
+          description: A description of the purpose of this action
+        modifies:
+          type: boolean
+          description: Whether the action can change any managed resource
+        stateless:
+          type: boolean
+          description: Whether the action is purely informational
+          default: false
+
+    Claim:
+      type: object
+      description: CNAB Claim representing an installation action
+      required:
+        - id
+        - installation
+        - action
+        - bundle
+        - revision
+        - created
+      properties:
+        id:
+          type: string
+          description: The claim ID (ULID)
+        installation:
+          type: string
+          description: The name of the installation
+        action:
+          type: string
+          description: The name of the action (install, uninstall, upgrade, or custom)
+        bundle:
+          $ref: '#/components/schemas/Bundle'
+        bundleReference:
+          type: string
+          description: A canonical reference to the bundle used
+        revision:
+          type: string
+          description: The revision ID (ULID)
+        created:
+          type: string
+          format: date-time
+          description: The date created (ISO-8601)
+        parameters:
+          type: object
+          description: Key/value pairs of parameter name to value
+          additionalProperties: true
+        custom:
+          type: object
+          description: Reserved for custom extensions
+          additionalProperties: true
+
+    ClaimResult:
+      type: object
+      description: CNAB Claim Result representing the outcome of an action
+      required:
+        - id
+        - claimId
+        - status
+        - created
+      properties:
+        id:
+          type: string
+          description: The result ID (ULID)
+        claimId:
+          type: string
+          description: The associated claim ID
+        status:
+          $ref: '#/components/schemas/ClaimResultStatus'
+        message:
+          type: string
+          description: The last message from the invocation image or runtime
+        created:
+          type: string
+          format: date-time
+          description: The date created (ISO-8601)
+        outputs:
+          type: object
+          description: Map of outputs generated by the operation
+          additionalProperties:
+            $ref: '#/components/schemas/ClaimResultOutput'
+        custom:
+          type: object
+          description: Reserved for custom extensions
+          additionalProperties: true
+
+    ClaimResultStatus:
+      type: string
+      description: The status of the operation
+      enum:
+        - canceled
+        - failed
+        - succeeded
+        - pending
+        - running
+        - unknown
+
+    ClaimResultOutput:
+      type: object
+      description: An output value from a claim result
+      properties:
+        contentDigest:
+          type: string
+          description: A cryptographic hash digest of the output contents
+      additionalProperties: true
+
+    Status:
+      type: object
+      description: Overall status of a CNAB installation
+      properties:
+        status:
+          type: string
+          description: Status identifier (Ready, Pending, Failed are well known)
+        message:
+          type: string
+          description: Details about the current status
+        components:
+          type: object
+          description: Map of component names to their status
+          additionalProperties:
+            $ref: '#/components/schemas/StatusComponent'
+      additionalProperties: true
+
+    StatusComponent:
+      type: object
+      description: Status of a component in a CNAB installation
+      properties:
+        status:
+          type: string
+          description: Status identifier
+        message:
+          type: string
+          description: Details about the current status
+        components:
+          type: object
+          description: Nested components with their own status
+          additionalProperties:
+            $ref: '#/components/schemas/StatusComponent'
+      additionalProperties: true
+
+    Dependencies:
+      type: object
+      description: CNAB Dependencies extension
+      properties:
+        requires:
+          type: object
+          description: Dependent bundles required by this bundle
+          additionalProperties:
+            $ref: '#/components/schemas/Dependency'
+          minProperties: 1
+      minProperties: 1
+
+    Dependency:
+      type: object
+      description: A dependency on another bundle
+      required:
+        - bundle
+      properties:
+        bundle:
+          type: string
+          description: A reference to a bundle (REGISTRY/NAME format)
+        version:
+          $ref: '#/components/schemas/DependencyVersion'
+
+    DependencyVersion:
+      type: object
+      description: Version criteria for selecting a dependency
+      minProperties: 1
+      properties:
+        ranges:
+          type: array
+          description: Array of allowed version ranges (semver format)
+          items:
+            type: string
+          minItems: 1
+        prereleases:
+          type: boolean
+          description: Whether prerelease versions are allowed
+          default: false
+
+    ParameterSources:
+      type: object
+      description: CNAB Parameter Sources extension
+      additionalProperties:
+        $ref: '#/components/schemas/ParameterSource'
+      minProperties: 1
+
+    ParameterSource:
+      type: object
+      description: Defines how a parameter value should be sourced
+      minProperties: 1
+      properties:
+        priority:
+          type: array
+          description: Source types in priority order
+          items:
+            type: string
+            enum:
+              - output
+          minItems: 1
+        sources:
+          type: object
+          description: Source definitions for the parameter
+          properties:
+            output:
+              $ref: '#/components/schemas/ParameterSourceOutput'
+          minProperties: 1
+
+    ParameterSourceOutput:
+      type: object
+      description: Specifies that the source is an output
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The name of the source output
+          minLength: 1
+
+    RelocationMapping:
+      type: object
+      description: Mapping of original image references to relocated destinations
+      additionalProperties:
+        type: string
+
+    Error:
+      type: object
+      description: Error response
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            invalidSchema:
+              $ref: '#/components/examples/ErrorBadRequest'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            notFound:
+              $ref: '#/components/examples/ErrorNotFound'
+
+    Conflict:
+      description: Resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            conflict:
+              $ref: '#/components/examples/ErrorConflict'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            internalError:
+              $ref: '#/components/examples/ErrorInternal'
+
+  examples:
+    # Bundle Examples
+    WordPressBundle:
+      summary: WordPress Bundle Example
+      description: A complete WordPress installation with MySQL database
+      value:
+        schemaVersion: v1
+        name: my-wordpress-bundle
+        version: 1.2.3
+        description: A complete WordPress installation with MySQL database
+        keywords:
+          - wordpress
+          - blog
+          - cms
+          - mysql
+        maintainers:
+          - name: Jane Developer
+            email: jane@example.com
+            url: https://example.com/maintainers/jane
+        license: Apache-2.0
+        invocationImages:
+          - imageType: oci
+            image: example.com/my-wordpress-bundle:1.2.3
+            contentDigest: sha256:abc123def456...
+            size: 52428800
+            mediaType: application/vnd.oci.image.manifest.v1+json
+            labels:
+              org.opencontainers.image.title: WordPress Bundle Installer
+        images:
+          wordpress:
+            imageType: oci
+            image: wordpress:6.0
+            description: WordPress application image
+            contentDigest: sha256:wordpress123...
+          mysql:
+            imageType: oci
+            image: mysql:8.0
+            description: MySQL database image
+            contentDigest: sha256:mysql456...
+        credentials:
+          db-password:
+            description: Password for the MySQL database
+            env: MYSQL_PASSWORD
+            required: true
+          admin-key:
+            description: Admin API key for WordPress
+            path: /cnab/app/credentials/admin-key
+            required: false
+            applyTo:
+              - install
+              - upgrade
+        parameters:
+          site-name:
+            definition: site-name-def
+            description: The name of your WordPress site
+            destination:
+              env: WORDPRESS_SITE_NAME
+            required: true
+          replica-count:
+            definition: replica-count-def
+            description: Number of WordPress replicas to deploy
+            destination:
+              env: REPLICA_COUNT
+            applyTo:
+              - install
+              - upgrade
+        definitions:
+          site-name-def:
+            type: string
+            minLength: 1
+            maxLength: 100
+            default: My WordPress Site
+          replica-count-def:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 2
+          db-connection-def:
+            type: string
+            description: Database connection string
+        outputs:
+          db-connection-string:
+            definition: db-connection-def
+            description: MySQL connection string for the application
+            path: /cnab/app/outputs/db-connection
+            applyTo:
+              - install
+        actions:
+          io.example.backup:
+            description: Creates a backup of the WordPress database and files
+            modifies: false
+            stateless: false
+          io.example.restore:
+            description: Restores WordPress from a backup
+            modifies: true
+        custom:
+          io.example.metadata:
+            category: cms
+            tier: standard
+
+    CassandraBundle:
+      summary: Cassandra Cluster Bundle
+      description: High-availability Cassandra cluster with backup and monitoring
+      value:
+        schemaVersion: v1
+        name: cassandra-cluster
+        version: 3.11.0
+        description: High-availability Cassandra cluster with backup automation and monitoring dashboard
+        keywords:
+          - database
+          - cassandra
+          - nosql
+          - distributed
+          - high-availability
+        maintainers:
+          - name: Database Reliability Engineering
+            email: dre@enterprise.io
+            url: https://enterprise.io/teams/dre
+        license: Apache-2.0
+        invocationImages:
+          - imageType: oci
+            image: enterprise.io/bundles/cassandra-operator:3.11.0
+            contentDigest: sha256:9876abcd5432...
+            size: 157286400
+            mediaType: application/vnd.oci.image.manifest.v1+json
+            labels:
+              org.opencontainers.image.authors: DRE Team
+              org.opencontainers.image.version: 3.11.0
+        images:
+          cassandra-node:
+            imageType: oci
+            image: cassandra:4.1.3
+            description: Apache Cassandra database node
+            contentDigest: sha256:cassandra999...
+            size: 524288000
+            labels:
+              role: database
+              cluster-ready: 'true'
+          backup-agent:
+            imageType: oci
+            image: enterprise.io/cassandra-backup:2.5.0
+            description: Automated backup and restore agent
+            contentDigest: sha256:backup777...
+          monitoring-dashboard:
+            imageType: oci
+            image: grafana/grafana:10.1.0
+            description: Grafana dashboard for cluster monitoring
+          metrics-exporter:
+            imageType: oci
+            image: enterprise.io/cassandra-exporter:1.3.2
+            description: Prometheus metrics exporter for Cassandra
+        credentials:
+          cassandra-admin-password:
+            description: Administrator password for Cassandra cluster
+            env: CASSANDRA_ADMIN_PASSWORD
+            required: true
+          backup-storage-credentials:
+            description: Cloud storage credentials for backups
+            path: /cnab/app/credentials/backup-creds.json
+            required: true
+            applyTo:
+              - install
+              - upgrade
+              - io.enterprise.backup
+              - io.enterprise.restore
+        parameters:
+          cluster-name:
+            definition: cluster-name-def
+            description: Unique name for the Cassandra cluster
+            destination:
+              env: CLUSTER_NAME
+            required: true
+          node-count:
+            definition: node-count-def
+            description: Number of Cassandra nodes in the cluster
+            destination:
+              env: NODE_COUNT
+            required: true
+            applyTo:
+              - install
+              - upgrade
+              - io.enterprise.scale
+        definitions:
+          cluster-name-def:
+            type: string
+            pattern: ^[a-zA-Z][a-zA-Z0-9-]*$
+            minLength: 3
+            maxLength: 48
+          node-count-def:
+            type: integer
+            minimum: 3
+            maximum: 100
+            default: 3
+        actions:
+          io.enterprise.backup:
+            description: Create an immediate full backup of the cluster
+            modifies: false
+            stateless: false
+            title: Backup Cluster
+          io.enterprise.restore:
+            description: Restore cluster from a backup snapshot
+            modifies: true
+            stateless: false
+            title: Restore from Backup
+          io.enterprise.scale:
+            description: Add or remove nodes from the cluster
+            modifies: true
+            stateless: false
+            title: Scale Cluster
+        requiredExtensions:
+          - io.cnab.dependencies
+          - io.cnab.status
+        custom:
+          io.enterprise.sla:
+            availability-target: 99.99%
+            support-tier: enterprise
+
+    MLInferenceBundle:
+      summary: ML Inference Service Bundle
+      description: TensorFlow model deployment with Redis cache and monitoring
+      value:
+        schemaVersion: v1
+        name: ml-inference-service
+        version: 2.0.1-beta.1
+        description: Deploy a TensorFlow model with Redis cache and monitoring
+        keywords:
+          - machine-learning
+          - tensorflow
+          - inference
+          - api
+        maintainers:
+          - name: ML Platform Team
+            email: ml-team@acme.corp
+          - name: DevOps Team
+            url: https://acme.corp/teams/devops
+        license: MIT
+        invocationImages:
+          - imageType: oci
+            image: acme.azurecr.io/ml-bundle-installer:2.0.1-beta.1
+            contentDigest: sha256:fedcba987654...
+            size: 104857600
+            mediaType: application/vnd.oci.image.manifest.v1+json
+        images:
+          inference-server:
+            imageType: oci
+            image: tensorflow/serving:2.12.0-gpu
+            description: TensorFlow Serving for model inference
+            contentDigest: sha256:tf789abc...
+            size: 2147483648
+            labels:
+              component: inference
+              gpu-enabled: 'true'
+          redis-cache:
+            imageType: oci
+            image: redis:7-alpine
+            description: Redis cache for prediction results
+            contentDigest: sha256:redis321...
+          prometheus:
+            imageType: oci
+            image: prom/prometheus:v2.45.0
+            description: Metrics collection and monitoring
+        credentials:
+          model-storage-key:
+            description: Access key for model storage bucket
+            path: /cnab/app/credentials/storage-key.json
+            required: true
+            applyTo:
+              - install
+              - upgrade
+              - io.acme.model-update
+        parameters:
+          model-name:
+            definition: model-name-def
+            description: Name of the ML model to deploy
+            destination:
+              env: MODEL_NAME
+            required: true
+          model-version:
+            definition: model-version-def
+            description: Version of the model to deploy
+            destination:
+              env: MODEL_VERSION
+            required: true
+        definitions:
+          model-name-def:
+            type: string
+            pattern: ^[a-z0-9-]+$
+            minLength: 3
+            maxLength: 50
+          model-version-def:
+            type: string
+            pattern: ^v[0-9]+\.[0-9]+\.[0-9]+$
+        actions:
+          io.acme.model-update:
+            description: Update the ML model without full redeployment
+            modifies: true
+            stateless: false
+          io.acme.health-check:
+            description: Check health of all service components
+            modifies: false
+            stateless: true
+        requiredExtensions:
+          - io.cnab.dependencies
+          - io.cnab.parameter-sources
+
+    # List Response Examples
+    BundleListResponse:
+      summary: Bundle list response
+      description: Example response for listing bundles
+      value:
+        items:
+          - schemaVersion: v1
+            name: my-wordpress-bundle
+            version: 1.2.3
+            description: A complete WordPress installation with MySQL database
+            keywords:
+              - wordpress
+              - blog
+            invocationImages:
+              - image: example.com/my-wordpress-bundle:1.2.3
+                imageType: oci
+          - schemaVersion: v1
+            name: cassandra-cluster
+            version: 3.11.0
+            description: High-availability Cassandra cluster
+            keywords:
+              - database
+              - cassandra
+            invocationImages:
+              - image: enterprise.io/bundles/cassandra-operator:3.11.0
+                imageType: oci
+        total: 2
+        limit: 20
+        offset: 0
+
+    # Claim Examples
+    ClaimInstall:
+      summary: Install claim example
+      description: Example claim for an install action
+      value:
+        id: 01HQXYZ123456789ABCDEFGH
+        installation: my-wordpress-prod
+        action: install
+        bundle:
+          schemaVersion: v1
+          name: my-wordpress-bundle
+          version: 1.2.3
+          invocationImages:
+            - image: example.com/my-wordpress-bundle:1.2.3
+              imageType: oci
+        bundleReference: example.com/my-wordpress-bundle:1.2.3
+        revision: 01HQXYZ123456789ABCDEFGI
+        created: '2024-01-15T10:30:00Z'
+        parameters:
+          site-name: My Production Blog
+          replica-count: 3
+
+    ClaimUpgrade:
+      summary: Upgrade claim example
+      description: Example claim for an upgrade action
+      value:
+        id: 01HQXYZ223456789ABCDEFGH
+        installation: my-wordpress-prod
+        action: upgrade
+        bundle:
+          schemaVersion: v1
+          name: my-wordpress-bundle
+          version: 1.3.0
+          invocationImages:
+            - image: example.com/my-wordpress-bundle:1.3.0
+              imageType: oci
+        bundleReference: example.com/my-wordpress-bundle:1.3.0
+        revision: 01HQXYZ223456789ABCDEFGI
+        created: '2024-02-20T14:45:00Z'
+        parameters:
+          site-name: My Production Blog
+          replica-count: 5
+
+    ClaimListResponse:
+      summary: Claim list response
+      description: Example response for listing claims
+      value:
+        items:
+          - id: 01HQXYZ123456789ABCDEFGH
+            installation: my-wordpress-prod
+            action: install
+            revision: 01HQXYZ123456789ABCDEFGI
+            created: '2024-01-15T10:30:00Z'
+          - id: 01HQXYZ223456789ABCDEFGH
+            installation: my-wordpress-prod
+            action: upgrade
+            revision: 01HQXYZ223456789ABCDEFGI
+            created: '2024-02-20T14:45:00Z'
+        total: 2
+
+    # Claim Result Examples
+    ClaimResultSuccess:
+      summary: Successful claim result
+      description: Example of a successful operation result
+      value:
+        id: 01HQABC123456789ABCDEFGH
+        claimId: 01HQXYZ123456789ABCDEFGH
+        status: succeeded
+        message: Installation completed successfully
+        created: '2024-01-15T10:35:00Z'
+        outputs:
+          db-connection-string:
+            contentDigest: sha256:conn123...
+
+    ClaimResultFailed:
+      summary: Failed claim result
+      description: Example of a failed operation result
+      value:
+        id: 01HQABC223456789ABCDEFGH
+        claimId: 01HQXYZ223456789ABCDEFGH
+        status: failed
+        message: 'Error: Unable to connect to database server'
+        created: '2024-02-20T14:50:00Z'
+        outputs: {}
+
+    ClaimResultListResponse:
+      summary: Claim result list response
+      description: Example response for listing claim results
+      value:
+        - id: 01HQABC123456789ABCDEFGH
+          claimId: 01HQXYZ123456789ABCDEFGH
+          status: succeeded
+          message: Installation completed successfully
+          created: '2024-01-15T10:35:00Z'
+        - id: 01HQABC223456789ABCDEFGH
+          claimId: 01HQXYZ123456789ABCDEFGH
+          status: running
+          message: Upgrading database schema...
+          created: '2024-01-16T09:00:00Z'
+
+    # Status Examples
+    StatusReady:
+      summary: Ready installation status
+      description: Example of a healthy installation
+      value:
+        status: Ready
+        message: All components are running
+        components:
+          wordpress:
+            status: Ready
+            message: 3/3 replicas available
+          mysql:
+            status: Ready
+            message: Primary and replica healthy
+
+    StatusPending:
+      summary: Pending installation status
+      description: Example of an installation in progress
+      value:
+        status: Pending
+        message: Installation in progress
+        components:
+          wordpress:
+            status: Pending
+            message: Waiting for database to be ready
+          mysql:
+            status: Ready
+            message: Database initialized
+
+    StatusFailed:
+      summary: Failed installation status
+      description: Example of a failed installation
+      value:
+        status: Failed
+        message: One or more components have failed
+        components:
+          wordpress:
+            status: Failed
+            message: CrashLoopBackOff - unable to connect to database
+          mysql:
+            status: Ready
+            message: Database is running
+
+    StatusListResponse:
+      summary: Installation list response
+      description: Example response for listing installations
+      value:
+        - status: Ready
+          message: All components are running
+          components:
+            wordpress:
+              status: Ready
+            mysql:
+              status: Ready
+        - status: Pending
+          message: Upgrade in progress
+          components:
+            inference-server:
+              status: Pending
+            redis-cache:
+              status: Ready
+
+    # Action Execution Example
+    ActionExecutionRequest:
+      summary: Action execution request
+      description: Example request to execute a bundle action
+      value:
+        parameters:
+          site-name: My New WordPress Site
+          replica-count: 3
+        credentials:
+          db-password: secure-password-here
+
+    # Error Examples
+    ErrorBadRequest:
+      summary: Bad request error
+      description: Example error for invalid input
+      value:
+        code: BAD_REQUEST
+        message: Invalid bundle schema
+        details:
+          field: version
+          error: Version must follow SemVer2 format
+
+    ErrorNotFound:
+      summary: Not found error
+      description: Example error when resource is not found
+      value:
+        code: NOT_FOUND
+        message: Bundle 'my-bundle' not found
+
+    ErrorConflict:
+      summary: Conflict error
+      description: Example error when resource already exists
+      value:
+        code: CONFLICT
+        message: Bundle 'my-wordpress-bundle' version '1.2.3' already exists
+
+    ErrorInternal:
+      summary: Internal error
+      description: Example internal server error
+      value:
+        code: INTERNAL_ERROR
+        message: An unexpected error occurred
+        details:
+          requestId: req-123456
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT-based authentication
+
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key authentication
+
+security:
+  - bearerAuth: []
+  - apiKey: []

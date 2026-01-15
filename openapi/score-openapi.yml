@@ -1,0 +1,1932 @@
+openapi: 3.1.0
+info:
+  title: Score Workload Specification API
+  description: |
+    API for managing Score workload specifications. Score is a platform-agnostic 
+    workload specification that enables developers to define their workloads once 
+    and deploy them across multiple platforms.
+  version: 1.0.0
+  contact:
+    name: Score Project
+    url: https://score.dev
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: https://api.score.dev/v1
+    description: Production API
+  - url: https://api.staging.score.dev/v1
+    description: Staging API
+
+tags:
+  - name: Workloads
+    description: Score workload management operations
+  - name: Validation
+    description: Workload validation operations
+
+paths:
+  /workloads:
+    get:
+      tags:
+        - Workloads
+      summary: List all workloads
+      description: Retrieves a list of all Score workload specifications
+      operationId: listWorkloads
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+        - $ref: '#/components/parameters/NameFilterParam'
+      responses:
+        '200':
+          description: Successful response with list of workloads
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadList'
+              examples:
+                multipleWorkloads:
+                  $ref: '#/components/examples/WorkloadListExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Workloads
+      summary: Create a new workload
+      description: Creates a new Score workload specification
+      operationId: createWorkload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreWorkload'
+            examples:
+              ecommerceFrontend:
+                $ref: '#/components/examples/EcommerceFrontendExample'
+              dataPipelineWorker:
+                $ref: '#/components/examples/DataPipelineWorkerExample'
+              mlInferenceService:
+                $ref: '#/components/examples/MLInferenceServiceExample'
+          application/x-yaml:
+            schema:
+              $ref: '#/components/schemas/ScoreWorkload'
+      responses:
+        '201':
+          description: Workload created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreWorkload'
+              examples:
+                ecommerceFrontend:
+                  $ref: '#/components/examples/EcommerceFrontendExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /workloads/{workloadName}:
+    get:
+      tags:
+        - Workloads
+      summary: Get a specific workload
+      description: Retrieves a Score workload specification by name
+      operationId: getWorkload
+      parameters:
+        - $ref: '#/components/parameters/WorkloadNameParam'
+      responses:
+        '200':
+          description: Successful response with workload details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreWorkload'
+              examples:
+                ecommerceFrontend:
+                  $ref: '#/components/examples/EcommerceFrontendExample'
+                dataPipelineWorker:
+                  $ref: '#/components/examples/DataPipelineWorkerExample'
+                mlInferenceService:
+                  $ref: '#/components/examples/MLInferenceServiceExample'
+            application/x-yaml:
+              schema:
+                $ref: '#/components/schemas/ScoreWorkload'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      tags:
+        - Workloads
+      summary: Update a workload
+      description: Updates an existing Score workload specification
+      operationId: updateWorkload
+      parameters:
+        - $ref: '#/components/parameters/WorkloadNameParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreWorkload'
+            examples:
+              ecommerceFrontend:
+                $ref: '#/components/examples/EcommerceFrontendExample'
+          application/x-yaml:
+            schema:
+              $ref: '#/components/schemas/ScoreWorkload'
+      responses:
+        '200':
+          description: Workload updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreWorkload'
+              examples:
+                ecommerceFrontend:
+                  $ref: '#/components/examples/EcommerceFrontendExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - Workloads
+      summary: Delete a workload
+      description: Deletes a Score workload specification
+      operationId: deleteWorkload
+      parameters:
+        - $ref: '#/components/parameters/WorkloadNameParam'
+      responses:
+        '204':
+          description: Workload deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /workloads/{workloadName}/containers:
+    get:
+      tags:
+        - Workloads
+      summary: List containers in a workload
+      description: Retrieves all containers defined in a workload
+      operationId: listWorkloadContainers
+      parameters:
+        - $ref: '#/components/parameters/WorkloadNameParam'
+      responses:
+        '200':
+          description: Successful response with container list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerMap'
+              examples:
+                ecommerceContainers:
+                  $ref: '#/components/examples/EcommerceContainersExample'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /workloads/{workloadName}/resources:
+    get:
+      tags:
+        - Workloads
+      summary: List resources in a workload
+      description: Retrieves all resource dependencies defined in a workload
+      operationId: listWorkloadResources
+      parameters:
+        - $ref: '#/components/parameters/WorkloadNameParam'
+      responses:
+        '200':
+          description: Successful response with resource list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceMap'
+              examples:
+                ecommerceResources:
+                  $ref: '#/components/examples/EcommerceResourcesExample'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /validate:
+    post:
+      tags:
+        - Validation
+      summary: Validate a workload specification
+      description: Validates a Score workload specification without creating it
+      operationId: validateWorkload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreWorkload'
+            examples:
+              ecommerceFrontend:
+                $ref: '#/components/examples/EcommerceFrontendExample'
+          application/x-yaml:
+            schema:
+              $ref: '#/components/schemas/ScoreWorkload'
+      responses:
+        '200':
+          description: Validation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+              examples:
+                validResult:
+                  $ref: '#/components/examples/ValidationSuccessExample'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+              examples:
+                invalidResult:
+                  $ref: '#/components/examples/ValidationFailureExample'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  schemas:
+    # Main Score Workload Schema
+    ScoreWorkload:
+      type: object
+      description: Score workload specification
+      required:
+        - apiVersion
+        - metadata
+        - containers
+      additionalProperties: false
+      properties:
+        apiVersion:
+          type: string
+          description: The declared Score Specification version
+          pattern: ^score\.dev/v1b1$
+          examples:
+            - score.dev/v1b1
+        metadata:
+          $ref: '#/components/schemas/WorkloadMetadata'
+        service:
+          $ref: '#/components/schemas/Service'
+        containers:
+          $ref: '#/components/schemas/ContainerMap'
+        resources:
+          $ref: '#/components/schemas/ResourceMap'
+
+    # Metadata Schema
+    WorkloadMetadata:
+      type: object
+      description: The metadata description of the Workload
+      required:
+        - name
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+          description: >-
+            A string that can describe the Workload. Must be a valid RFC1123
+            Label Name of up to 63 characters.
+          minLength: 2
+          maxLength: 63
+          pattern: ^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$
+          examples:
+            - ecommerce-frontend
+            - data-pipeline-worker
+            - ml-inference-service
+        annotations:
+          $ref: '#/components/schemas/Annotations'
+
+    # Annotations Schema
+    Annotations:
+      type: object
+      description: >-
+        Annotations that apply to the Workload or Resource. Keys can contain
+        A-Z, a-z, 0-9, and '-' and may contain an optional /-separated RFC1123
+        Host Name prefix.
+      additionalProperties:
+        type: string
+      propertyNames:
+        minLength: 2
+        maxLength: 316
+        pattern: >-
+          ^(([a-z0-9][a-z0-9-]{0,61}[a-z0-9])(\.[a-z0-9][a-z0-9-]{0,61}[a-z0-9])*/)?[A-Za-z0-9][A-Za-z0-9._-]{0,61}[A-Za-z0-9]$
+
+    # Service Schema
+    Service:
+      type: object
+      description: The service that the workload provides
+      additionalProperties: false
+      properties:
+        ports:
+          $ref: '#/components/schemas/ServicePortMap'
+
+    # Service Port Map
+    ServicePortMap:
+      type: object
+      description: >-
+        The set of named network ports published by the service. Port names must
+        be valid RFC1123 Label Names.
+      propertyNames:
+        minLength: 2
+        maxLength: 63
+        pattern: ^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$
+      additionalProperties:
+        $ref: '#/components/schemas/ServicePort'
+
+    # Service Port Schema
+    ServicePort:
+      type: object
+      description: The network port description
+      required:
+        - port
+      additionalProperties: false
+      properties:
+        port:
+          type: integer
+          description: The public service port
+          minimum: 1
+          maximum: 65535
+          examples:
+            - 80
+            - 443
+            - 8080
+        protocol:
+          type: string
+          description: The transport level protocol. Defaults to TCP.
+          enum:
+            - TCP
+            - UDP
+          default: TCP
+        targetPort:
+          type: integer
+          description: >-
+            The internal service port. This will default to 'port' if not
+            provided.
+          minimum: 1
+          maximum: 65535
+
+    # Container Map
+    ContainerMap:
+      type: object
+      description: >-
+        The set of named containers in the Workload. Container names must be
+        valid RFC1123 Label Names.
+      minProperties: 1
+      propertyNames:
+        minLength: 2
+        maxLength: 63
+        pattern: ^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$
+      additionalProperties:
+        $ref: '#/components/schemas/Container'
+
+    # Container Schema
+    Container:
+      type: object
+      description: The specification of a Container within the Workload
+      required:
+        - image
+      additionalProperties: false
+      properties:
+        image:
+          type: string
+          description: The container image name and tag
+          minLength: 1
+          examples:
+            - nginx:1.25-alpine
+            - ghcr.io/myorg/app:2.5.0
+        command:
+          type: array
+          description: If specified, overrides the entrypoint defined in the container image
+          items:
+            type: string
+        args:
+          type: array
+          description: If specified, overrides the arguments passed to the container entrypoint
+          items:
+            type: string
+        variables:
+          $ref: '#/components/schemas/EnvironmentVariables'
+        files:
+          $ref: '#/components/schemas/ContainerFileMap'
+        volumes:
+          $ref: '#/components/schemas/ContainerVolumeMap'
+        resources:
+          $ref: '#/components/schemas/ContainerResources'
+        livenessProbe:
+          $ref: '#/components/schemas/ContainerProbe'
+        readinessProbe:
+          $ref: '#/components/schemas/ContainerProbe'
+
+    # Environment Variables
+    EnvironmentVariables:
+      type: object
+      description: The environment variables for the container
+      propertyNames:
+        minLength: 1
+        pattern: ^[^=]+$
+      additionalProperties:
+        type: string
+
+    # Container File Map
+    ContainerFileMap:
+      type: object
+      description: The extra files to mount into the container as a map of target paths to file details
+      additionalProperties:
+        $ref: '#/components/schemas/ContainerFile'
+
+    # Container File Schema
+    ContainerFile:
+      type: object
+      description: >-
+        The details of a file to mount in the container. One of 'source',
+        'content', or 'binaryContent' must be provided.
+      additionalProperties: false
+      oneOf:
+        - required:
+            - content
+        - required:
+            - binaryContent
+        - required:
+            - source
+      properties:
+        mode:
+          type: string
+          description: The optional file access mode in octal encoding
+          pattern: ^0?[0-7]{3}$
+          examples:
+            - "0644"
+            - "0600"
+            - "0444"
+        source:
+          type: string
+          description: The relative or absolute path to the content file
+          minLength: 1
+        content:
+          type: string
+          description: The inline content for the file. Only supports valid utf-8.
+        binaryContent:
+          type: string
+          description: >-
+            Inline standard-base64 encoded content for the file. Does not support
+            placeholder expansion.
+          contentEncoding: base64
+        noExpand:
+          type: boolean
+          description: >-
+            If set to true, the placeholders expansion will not occur in the
+            contents of the file.
+
+    # Container Volume Map
+    ContainerVolumeMap:
+      type: object
+      description: The volumes to mount as a map of target paths to volume details
+      additionalProperties:
+        $ref: '#/components/schemas/ContainerVolume'
+
+    # Container Volume Schema
+    ContainerVolume:
+      type: object
+      description: Volume mount specification
+      additionalProperties: false
+      required:
+        - source
+      properties:
+        source:
+          type: string
+          description: The external volume reference
+        path:
+          type: string
+          description: An optional sub path in the volume
+        readOnly:
+          type: boolean
+          description: Indicates if the volume should be mounted in a read-only mode
+
+    # Container Resources
+    ContainerResources:
+      type: object
+      description: The compute resources for the container
+      additionalProperties: false
+      properties:
+        limits:
+          $ref: '#/components/schemas/ResourcesLimits'
+        requests:
+          $ref: '#/components/schemas/ResourcesLimits'
+
+    # Resources Limits
+    ResourcesLimits:
+      type: object
+      description: The compute and memory resource limits
+      additionalProperties: false
+      properties:
+        memory:
+          type: string
+          description: >-
+            The memory limit in bytes with optional unit specifier.
+            For example 125M or 1Gi.
+          pattern: ^[1-9]\d*(K|M|G|T|Ki|Mi|Gi|Ti)?$
+          examples:
+            - 256M
+            - 1Gi
+            - 512Mi
+        cpu:
+          type: string
+          description: >-
+            The CPU limit as whole or fractional CPUs. 'm' indicates milli-CPUs.
+            For example 2 or 125m.
+          pattern: ^\d*(?:m|\.\d+)?$
+          examples:
+            - "1"
+            - 250m
+            - "0.5"
+
+    # Container Probe
+    ContainerProbe:
+      type: object
+      description: >-
+        The probe may be defined as either http, command execution, or both.
+        The execProbe should be preferred if the Score implementation supports both types.
+      additionalProperties: false
+      properties:
+        httpGet:
+          $ref: '#/components/schemas/HttpProbe'
+        exec:
+          $ref: '#/components/schemas/ExecProbe'
+
+    # HTTP Probe
+    HttpProbe:
+      type: object
+      description: An HTTP probe details
+      additionalProperties: false
+      required:
+        - port
+        - path
+      properties:
+        host:
+          type: string
+          description: >-
+            Host name to connect to. Defaults to the workload IP.
+            This is equivalent to a Host HTTP header.
+          minLength: 1
+        scheme:
+          type: string
+          description: >-
+            Scheme to use for connecting to the host (HTTP or HTTPS).
+            Defaults to HTTP.
+          enum:
+            - HTTP
+            - HTTPS
+          default: HTTP
+        path:
+          type: string
+          description: The path to access on the HTTP server
+          examples:
+            - /health
+            - /ready
+            - /health/live
+        port:
+          type: integer
+          description: The port to access on the workload
+          minimum: 1
+          maximum: 65535
+        httpHeaders:
+          type: array
+          description: Additional HTTP headers to send with the request
+          items:
+            $ref: '#/components/schemas/HttpHeader'
+
+    # HTTP Header
+    HttpHeader:
+      type: object
+      description: HTTP header for probe requests
+      additionalProperties: false
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          description: The HTTP header name
+          pattern: ^[A-Za-z0-9_-]+$
+        value:
+          type: string
+          description: The HTTP header value
+          minLength: 1
+
+    # Exec Probe
+    ExecProbe:
+      type: object
+      description: An executable health probe
+      additionalProperties: false
+      required:
+        - command
+      properties:
+        command:
+          type: array
+          description: The command and arguments to execute within the container
+          items:
+            type: string
+
+    # Resource Map
+    ResourceMap:
+      type: object
+      description: >-
+        The Resource dependencies needed by the Workload. Resource names must be
+        valid RFC1123 Label Names.
+      propertyNames:
+        minLength: 2
+        maxLength: 63
+        pattern: ^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$
+      additionalProperties:
+        $ref: '#/components/schemas/Resource'
+
+    # Resource Schema
+    Resource:
+      type: object
+      description: The set of Resources associated with this Workload
+      additionalProperties: false
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: >-
+            The Resource type. This should be a type supported by the Score
+            implementations being used.
+          minLength: 2
+          maxLength: 63
+          pattern: ^[A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9]$
+          examples:
+            - postgres
+            - redis
+            - s3
+            - volume
+            - secret
+            - service
+        class:
+          type: string
+          description: An optional specialisation of the Resource type
+          minLength: 2
+          maxLength: 63
+          pattern: ^[A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9]$
+          examples:
+            - managed
+            - cluster
+            - standard
+            - ssd
+        id:
+          type: string
+          description: >-
+            An optional Resource identifier. When two resources share the same
+            type, class, and id, they are considered the same resource when used
+            across related Workloads.
+          minLength: 2
+          maxLength: 63
+          pattern: ^[a-z0-9]+(?:-+[a-z0-9]+)*(?:\.[a-z0-9]+(?:-+[a-z0-9]+)*)*$
+          examples:
+            - ecommerce.products
+            - shared.feature-flags
+        metadata:
+          $ref: '#/components/schemas/ResourceMetadata'
+        params:
+          type: object
+          description: Optional parameters used to provision the Resource in the environment
+          additionalProperties: true
+
+    # Resource Metadata
+    ResourceMetadata:
+      type: object
+      description: The metadata for the Resource
+      additionalProperties: true
+      properties:
+        annotations:
+          $ref: '#/components/schemas/Annotations'
+
+    # Workload List Response
+    WorkloadList:
+      type: object
+      description: List of workloads response
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoreWorkload'
+        total:
+          type: integer
+          description: Total number of workloads
+        limit:
+          type: integer
+          description: Number of items per page
+        offset:
+          type: integer
+          description: Current offset
+
+    # Validation Result
+    ValidationResult:
+      type: object
+      description: Result of workload validation
+      properties:
+        valid:
+          type: boolean
+          description: Whether the workload is valid
+        errors:
+          type: array
+          description: List of validation errors
+          items:
+            $ref: '#/components/schemas/ValidationError'
+        warnings:
+          type: array
+          description: List of validation warnings
+          items:
+            $ref: '#/components/schemas/ValidationWarning'
+
+    # Validation Error
+    ValidationError:
+      type: object
+      description: A validation error
+      properties:
+        path:
+          type: string
+          description: JSON path to the error location
+        message:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+
+    # Validation Warning
+    ValidationWarning:
+      type: object
+      description: A validation warning
+      properties:
+        path:
+          type: string
+          description: JSON path to the warning location
+        message:
+          type: string
+          description: Warning message
+        code:
+          type: string
+          description: Warning code
+
+    # Error Response
+    ErrorResponse:
+      type: object
+      description: Standard error response
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              description: Additional error details
+              additionalProperties: true
+
+  examples:
+    # E-commerce Frontend Example
+    EcommerceFrontendExample:
+      summary: E-commerce Frontend Workload
+      description: A complete e-commerce frontend application with nginx sidecar
+      value:
+        apiVersion: score.dev/v1b1
+        metadata:
+          name: ecommerce-frontend
+          annotations:
+            app.kubernetes.io/part-of: ecommerce-platform
+            app.kubernetes.io/version: "2.5.0"
+            team.company.io/owner: frontend-team
+            deployment.company.io/tier: production
+        service:
+          ports:
+            web:
+              port: 443
+              targetPort: 8080
+              protocol: TCP
+            metrics:
+              port: 9090
+              targetPort: 9090
+              protocol: TCP
+        containers:
+          frontend:
+            image: ghcr.io/myorg/ecommerce-frontend:2.5.0
+            command:
+              - /usr/bin/node
+            args:
+              - server.js
+              - --config=/etc/app/config.json
+              - --log-level=info
+            variables:
+              NODE_ENV: production
+              API_BASE_URL: https://api.ecommerce.example.com
+              CACHE_TTL: "3600"
+              SESSION_SECRET: ${resources.session-secrets.secret}
+              DATABASE_URL: ${resources.postgres-db.connection_string}
+              REDIS_HOST: ${resources.cache.host}
+              REDIS_PORT: ${resources.cache.port}
+              STORAGE_BUCKET: ${resources.object-storage.bucket}
+              CDN_URL: https://cdn.ecommerce.example.com
+              FEATURE_FLAGS_ENDPOINT: ${resources.feature-flags.endpoint}
+            files:
+              /etc/app/config.json:
+                content: |
+                  {
+                    "appName": "E-Commerce Frontend",
+                    "version": "2.5.0",
+                    "features": {
+                      "darkMode": true,
+                      "recommendations": true,
+                      "liveChat": false
+                    },
+                    "analytics": {
+                      "enabled": true,
+                      "sampleRate": 0.1
+                    }
+                  }
+                mode: "0644"
+              /etc/app/locales/en.json:
+                source: ./locales/en.json
+                mode: "0644"
+              /etc/ssl/certs/internal-ca.crt:
+                source: ./certs/internal-ca.crt
+                mode: "0444"
+                noExpand: true
+              /etc/app/banner.png:
+                binaryContent: iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==
+                mode: "0644"
+            volumes:
+              /data/uploads:
+                source: ${resources.uploads-volume.source}
+                readOnly: false
+              /data/static:
+                source: ${resources.static-assets.source}
+                path: assets/v2
+                readOnly: true
+            resources:
+              requests:
+                memory: 256M
+                cpu: 250m
+              limits:
+                memory: 1Gi
+                cpu: "1"
+            readinessProbe:
+              httpGet:
+                path: /health/ready
+                port: 8080
+                scheme: HTTP
+                httpHeaders:
+                  - name: X-Health-Check
+                    value: readiness
+            livenessProbe:
+              httpGet:
+                path: /health/live
+                port: 8080
+                scheme: HTTP
+          nginx-sidecar:
+            image: nginx:1.25-alpine
+            variables:
+              NGINX_WORKER_PROCESSES: "auto"
+              NGINX_WORKER_CONNECTIONS: "1024"
+            files:
+              /etc/nginx/nginx.conf:
+                content: |
+                  worker_processes auto;
+                  events {
+                    worker_connections 1024;
+                  }
+                  http {
+                    upstream frontend {
+                      server 127.0.0.1:8080;
+                    }
+                    server {
+                      listen 443 ssl;
+                      ssl_certificate /etc/ssl/certs/tls.crt;
+                      ssl_certificate_key /etc/ssl/private/tls.key;
+                      location / {
+                        proxy_pass http://frontend;
+                        proxy_set_header Host $host;
+                        proxy_set_header X-Real-IP $remote_addr;
+                      }
+                      location /static/ {
+                        alias /data/static/;
+                        expires 1y;
+                      }
+                    }
+                  }
+                mode: "0644"
+            volumes:
+              /data/static:
+                source: ${resources.static-assets.source}
+                path: assets/v2
+                readOnly: true
+              /etc/ssl/certs:
+                source: ${resources.tls-certs.source}
+                path: certs
+                readOnly: true
+              /etc/ssl/private:
+                source: ${resources.tls-certs.source}
+                path: keys
+                readOnly: true
+            resources:
+              requests:
+                memory: 64M
+                cpu: 50m
+              limits:
+                memory: 128M
+                cpu: 200m
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: 443
+                scheme: HTTPS
+        resources:
+          postgres-db:
+            type: postgres
+            class: managed
+            id: ecommerce.products
+            metadata:
+              annotations:
+                backup.company.io/enabled: "true"
+                backup.company.io/retention: "30d"
+            params:
+              version: "15"
+              size: large
+              highAvailability: true
+              extensions:
+                - pg_trgm
+                - uuid-ossp
+          cache:
+            type: redis
+            class: cluster
+            id: ecommerce.session-cache
+            params:
+              version: "7.2"
+              maxMemoryPolicy: allkeys-lru
+              clusterMode: true
+          session-secrets:
+            type: secret
+            id: ecommerce.session
+            params:
+              keys:
+                - secret
+                - encryptionKey
+          object-storage:
+            type: s3
+            class: standard
+            id: ecommerce.assets
+            params:
+              versioning: true
+              lifecycle:
+                - prefix: temp/
+                  expirationDays: 7
+          uploads-volume:
+            type: volume
+            class: ssd
+            params:
+              size: 50Gi
+              accessMode: ReadWriteMany
+          static-assets:
+            type: volume
+            class: standard
+            id: ecommerce.static
+            params:
+              size: 10Gi
+              accessMode: ReadOnlyMany
+          tls-certs:
+            type: secret
+            class: tls
+            id: ecommerce.tls
+          feature-flags:
+            type: service
+            id: shared.feature-flags
+            params:
+              environment: production
+
+    # Data Pipeline Worker Example
+    DataPipelineWorkerExample:
+      summary: Data Pipeline Worker Workload
+      description: A data processing worker with Kafka integration and metrics exporter
+      value:
+        apiVersion: score.dev/v1b1
+        metadata:
+          name: data-pipeline-worker
+          annotations:
+            app.kubernetes.io/component: worker
+            app.kubernetes.io/part-of: data-platform
+            processing.company.io/queue: high-priority
+            monitoring.company.io/alerts: critical
+        service:
+          ports:
+            metrics:
+              port: 9090
+              targetPort: 9090
+              protocol: TCP
+            health:
+              port: 8081
+              targetPort: 8081
+              protocol: TCP
+        containers:
+          worker:
+            image: 123456789012.dkr.ecr.us-west-2.amazonaws.com/data-worker:3.1.0
+            command:
+              - /app/worker
+            args:
+              - --config=/etc/worker/config.yaml
+              - --workers=4
+              - --batch-size=1000
+              - --log-format=json
+            variables:
+              WORKER_ID: ${metadata.name}
+              KAFKA_BROKERS: ${resources.kafka-cluster.brokers}
+              KAFKA_TOPIC_INPUT: raw-events
+              KAFKA_TOPIC_OUTPUT: processed-events
+              KAFKA_CONSUMER_GROUP: data-pipeline-workers
+              SCHEMA_REGISTRY_URL: ${resources.schema-registry.url}
+              MONGODB_URI: ${resources.timeseries-db.uri}
+              MONGODB_DATABASE: analytics
+              S3_BUCKET: ${resources.data-lake.bucket}
+              S3_REGION: ${resources.data-lake.region}
+              AWS_ACCESS_KEY_ID: ${resources.aws-credentials.access_key_id}
+              AWS_SECRET_ACCESS_KEY: ${resources.aws-credentials.secret_access_key}
+              CHECKPOINT_INTERVAL_MS: "60000"
+              MAX_POLL_RECORDS: "500"
+              PROCESSING_TIMEOUT_MS: "30000"
+              DEAD_LETTER_TOPIC: failed-events
+              METRICS_PORT: "9090"
+              HEALTH_PORT: "8081"
+              OTEL_EXPORTER_OTLP_ENDPOINT: ${resources.observability.otlp_endpoint}
+              OTEL_SERVICE_NAME: data-pipeline-worker
+            files:
+              /etc/worker/config.yaml:
+                content: |
+                  worker:
+                    name: ${metadata.name}
+                    parallelism: 4
+                    batchSize: 1000
+                    flushInterval: 5s
+                  
+                  kafka:
+                    consumer:
+                      autoOffsetReset: earliest
+                      enableAutoCommit: false
+                      maxPollIntervalMs: 300000
+                    producer:
+                      acks: all
+                      retries: 3
+                      compressionType: snappy
+                  
+                  processing:
+                    transforms:
+                      - name: parse-json
+                        type: json-parser
+                      - name: enrich-geo
+                        type: geo-lookup
+                        config:
+                          database: /data/geoip/GeoLite2-City.mmdb
+                      - name: anonymize-pii
+                        type: pii-filter
+                        config:
+                          fields:
+                            - email
+                            - phone
+                            - ip_address
+                      - name: aggregate-metrics
+                        type: aggregator
+                        config:
+                          window: 1m
+                          groupBy:
+                            - country
+                            - device_type
+                  
+                  output:
+                    formats:
+                      - parquet
+                      - json
+                    partitioning:
+                      type: time
+                      granularity: hourly
+                mode: "0644"
+              /etc/worker/schemas/event.avsc:
+                source: ./schemas/event.avsc
+                mode: "0644"
+                noExpand: true
+              /etc/worker/schemas/output.avsc:
+                source: ./schemas/output.avsc
+                mode: "0644"
+                noExpand: true
+            volumes:
+              /data/geoip:
+                source: ${resources.geoip-database.source}
+                readOnly: true
+              /data/checkpoints:
+                source: ${resources.checkpoint-volume.source}
+                readOnly: false
+              /data/tmp:
+                source: ${resources.scratch-volume.source}
+                path: worker-tmp
+                readOnly: false
+            resources:
+              requests:
+                memory: 2Gi
+                cpu: "1"
+              limits:
+                memory: 8Gi
+                cpu: "4"
+            readinessProbe:
+              httpGet:
+                path: /ready
+                port: 8081
+                scheme: HTTP
+            livenessProbe:
+              exec:
+                command:
+                  - /app/healthcheck
+                  - --check=kafka-connection
+                  - --check=mongodb-connection
+                  - --timeout=10s
+          metrics-exporter:
+            image: prom/statsd-exporter:v0.24.0
+            args:
+              - --statsd.listen-udp=:9125
+              - --web.listen-address=:9102
+              - --statsd.mapping-config=/etc/statsd/mapping.yaml
+            files:
+              /etc/statsd/mapping.yaml:
+                content: |
+                  mappings:
+                    - match: "worker.*.processing.*"
+                      name: "worker_processing"
+                      labels:
+                        worker_id: "$1"
+                        metric: "$2"
+                    - match: "worker.*.kafka.*"
+                      name: "worker_kafka"
+                      labels:
+                        worker_id: "$1"
+                        operation: "$2"
+                    - match: "worker.*.errors.*"
+                      name: "worker_errors_total"
+                      labels:
+                        worker_id: "$1"
+                        error_type: "$2"
+                mode: "0644"
+            resources:
+              requests:
+                memory: 32M
+                cpu: 25m
+              limits:
+                memory: 64M
+                cpu: 100m
+            readinessProbe:
+              httpGet:
+                path: /metrics
+                port: 9102
+                scheme: HTTP
+        resources:
+          kafka-cluster:
+            type: kafka
+            class: managed
+            id: data-platform.events
+            metadata:
+              annotations:
+                kafka.company.io/retention: "7d"
+                kafka.company.io/partitions: "24"
+            params:
+              version: "3.5"
+              securityProtocol: SASL_SSL
+              saslMechanism: SCRAM-SHA-512
+          schema-registry:
+            type: service
+            id: data-platform.schema-registry
+            params:
+              compatibilityLevel: BACKWARD
+          timeseries-db:
+            type: mongodb
+            class: timeseries
+            id: analytics.metrics
+            params:
+              version: "7.0"
+              sharded: true
+              replicaSet: analytics-rs
+              writeConcern: majority
+          data-lake:
+            type: s3
+            class: data-lake
+            id: analytics.raw-data
+            metadata:
+              annotations:
+                storage.company.io/tier: intelligent-tiering
+            params:
+              versioning: false
+              lifecycle:
+                - prefix: raw/
+                  transitionDays: 30
+                  storageClass: GLACIER
+                - prefix: processed/
+                  expirationDays: 365
+          aws-credentials:
+            type: secret
+            class: aws-iam
+            id: data-platform.s3-access
+            params:
+              policy: s3-read-write
+          geoip-database:
+            type: volume
+            class: configmap
+            id: shared.geoip
+            params:
+              updateSchedule: weekly
+          checkpoint-volume:
+            type: volume
+            class: ssd
+            params:
+              size: 100Gi
+              accessMode: ReadWriteOnce
+          scratch-volume:
+            type: volume
+            class: ephemeral
+            params:
+              size: 50Gi
+          observability:
+            type: service
+            id: shared.observability
+            params:
+              traces: true
+              metrics: true
+              logs: true
+
+    # ML Inference Service Example
+    MLInferenceServiceExample:
+      summary: ML Inference Service Workload
+      description: A machine learning inference service with model server, request router, and A/B testing controller
+      value:
+        apiVersion: score.dev/v1b1
+        metadata:
+          name: ml-inference-service
+          annotations:
+            app.kubernetes.io/component: inference
+            app.kubernetes.io/part-of: ml-platform
+            ml.company.io/model-name: product-recommendations
+            ml.company.io/model-version: "4.2.1"
+            ml.company.io/framework: pytorch
+            gpu.company.io/required: "true"
+        service:
+          ports:
+            http:
+              port: 8080
+              targetPort: 8080
+              protocol: TCP
+            grpc:
+              port: 8081
+              targetPort: 8081
+              protocol: TCP
+            metrics:
+              port: 9090
+              targetPort: 9090
+              protocol: TCP
+            admin:
+              port: 8082
+              targetPort: 8082
+              protocol: TCP
+        containers:
+          model-server:
+            image: myacr.azurecr.io/ml-serving/inference-server:4.2.1
+            command:
+              - python
+              - -m
+              - inference_server
+            args:
+              - --config=/etc/model-server/config.yaml
+              - --model-path=/models/current
+              - --http-port=8080
+              - --grpc-port=8081
+              - --metrics-port=9090
+              - --admin-port=8082
+            variables:
+              MODEL_NAME: product-recommendations
+              MODEL_VERSION: "4.2.1"
+              PYTORCH_CUDA_ALLOC_CONF: max_split_size_mb:512
+              CUDA_VISIBLE_DEVICES: "0"
+              OMP_NUM_THREADS: "4"
+              MKL_NUM_THREADS: "4"
+              TOKENIZERS_PARALLELISM: "false"
+              MODEL_REGISTRY_URL: ${resources.model-registry.url}
+              MODEL_REGISTRY_TOKEN: ${resources.model-registry-credentials.token}
+              FEATURE_STORE_HOST: ${resources.feature-store.host}
+              FEATURE_STORE_PORT: ${resources.feature-store.port}
+              CACHE_REDIS_HOST: ${resources.inference-cache.host}
+              CACHE_REDIS_PORT: ${resources.inference-cache.port}
+              CACHE_TTL_SECONDS: "300"
+              MAX_BATCH_SIZE: "32"
+              MAX_QUEUE_DELAY_MS: "100"
+              REQUEST_TIMEOUT_MS: "5000"
+              DB_CONNECTION_STRING: ${resources.prediction-log-db.connection_string}
+              OTEL_EXPORTER_OTLP_ENDPOINT: ${resources.observability.otlp_endpoint}
+              OTEL_SERVICE_NAME: ml-inference-service
+              LOG_LEVEL: INFO
+              PYTHONUNBUFFERED: "1"
+            files:
+              /etc/model-server/config.yaml:
+                content: |
+                  server:
+                    name: ml-inference-service
+                    version: 4.2.1
+                  
+                  model:
+                    name: product-recommendations
+                    version: 4.2.1
+                    type: pytorch
+                    inputSchema:
+                      type: object
+                      properties:
+                        user_id:
+                          type: string
+                        product_ids:
+                          type: array
+                          items:
+                            type: string
+                        context:
+                          type: object
+                    outputSchema:
+                      type: object
+                      properties:
+                        recommendations:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              product_id:
+                                type: string
+                              score:
+                                type: number
+                        confidence:
+                          type: number
+                  
+                  inference:
+                    batchSize: 32
+                    maxQueueDelay: 100ms
+                    timeout: 5s
+                    warmup:
+                      enabled: true
+                      samples: 100
+                  
+                  caching:
+                    enabled: true
+                    ttl: 300s
+                    keyPrefix: "rec:v4:"
+                  
+                  featureStore:
+                    enabled: true
+                    features:
+                      - user_embeddings
+                      - product_embeddings
+                      - user_history
+                      - trending_products
+                  
+                  monitoring:
+                    metrics:
+                      enabled: true
+                      histogramBuckets:
+                        - 0.005
+                        - 0.01
+                        - 0.025
+                        - 0.05
+                        - 0.1
+                        - 0.25
+                        - 0.5
+                        - 1.0
+                    logging:
+                      predictionSampling: 0.01
+                      errorLogging: true
+                mode: "0644"
+              /etc/model-server/labels.json:
+                source: ./config/labels.json
+                mode: "0644"
+                noExpand: true
+            volumes:
+              /models/current:
+                source: ${resources.model-storage.source}
+                path: product-recommendations/v4.2.1
+                readOnly: true
+              /models/cache:
+                source: ${resources.model-cache.source}
+                readOnly: false
+              /data/features:
+                source: ${resources.feature-cache.source}
+                readOnly: false
+            resources:
+              requests:
+                memory: 8Gi
+                cpu: "4"
+              limits:
+                memory: 32Gi
+                cpu: "8"
+            readinessProbe:
+              httpGet:
+                path: /v1/health/ready
+                port: 8082
+                scheme: HTTP
+                httpHeaders:
+                  - name: Accept
+                    value: application/json
+            livenessProbe:
+              httpGet:
+                path: /v1/health/live
+                port: 8082
+                scheme: HTTP
+          request-router:
+            image: envoyproxy/envoy:v1.28.0
+            args:
+              - --config-path=/etc/envoy/envoy.yaml
+              - --log-level=info
+            files:
+              /etc/envoy/envoy.yaml:
+                content: |
+                  static_resources:
+                    listeners:
+                      - name: http_listener
+                        address:
+                          socket_address:
+                            address: 0.0.0.0
+                            port_value: 8080
+                        filter_chains:
+                          - filters:
+                              - name: envoy.filters.network.http_connection_manager
+                                typed_config:
+                                  "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                                  stat_prefix: ingress_http
+                                  route_config:
+                                    name: local_route
+                                    virtual_hosts:
+                                      - name: inference
+                                        domains: ["*"]
+                                        routes:
+                                          - match:
+                                              prefix: "/v1/predict"
+                                            route:
+                                              cluster: model_server
+                                              timeout: 10s
+                                            request_headers_to_add:
+                                              - header:
+                                                  key: X-Request-Start
+                                                  value: "%START_TIME%"
+                                  http_filters:
+                                    - name: envoy.filters.http.router
+                                      typed_config:
+                                        "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+                    clusters:
+                      - name: model_server
+                        connect_timeout: 1s
+                        type: STATIC
+                        lb_policy: ROUND_ROBIN
+                        load_assignment:
+                          cluster_name: model_server
+                          endpoints:
+                            - lb_endpoints:
+                                - endpoint:
+                                    address:
+                                      socket_address:
+                                        address: 127.0.0.1
+                                        port_value: 8080
+                mode: "0644"
+            resources:
+              requests:
+                memory: 64M
+                cpu: 100m
+              limits:
+                memory: 256M
+                cpu: 500m
+            readinessProbe:
+              httpGet:
+                path: /ready
+                port: 8001
+                scheme: HTTP
+          ab-controller:
+            image: myacr.azurecr.io/ml-serving/ab-controller:1.5.0
+            variables:
+              EXPERIMENT_CONFIG_PATH: /etc/experiments/config.yaml
+              MODEL_SERVER_ENDPOINT: http://127.0.0.1:8082
+              METRICS_ENDPOINT: ${resources.observability.metrics_endpoint}
+              EXPERIMENT_DB_URL: ${resources.experiment-db.connection_string}
+            files:
+              /etc/experiments/config.yaml:
+                content: |
+                  experiments:
+                    - name: recommendation-algorithm-v4
+                      enabled: true
+                      variants:
+                        - name: control
+                          weight: 80
+                          config:
+                            algorithm: collaborative-filtering
+                        - name: treatment
+                          weight: 20
+                          config:
+                            algorithm: transformer-based
+                      metrics:
+                        - name: click_through_rate
+                          type: ratio
+                        - name: conversion_rate
+                          type: ratio
+                        - name: latency_p99
+                          type: percentile
+                          percentile: 99
+                mode: "0644"
+            resources:
+              requests:
+                memory: 128M
+                cpu: 100m
+              limits:
+                memory: 256M
+                cpu: 250m
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: 8090
+                scheme: HTTP
+            livenessProbe:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - test -f /tmp/healthy
+        resources:
+          model-registry:
+            type: service
+            id: ml-platform.model-registry
+            metadata:
+              annotations:
+                ml.company.io/component: registry
+            params:
+              version: "2.0"
+          model-registry-credentials:
+            type: secret
+            id: ml-platform.registry-auth
+            params:
+              keys:
+                - token
+                - refreshToken
+          feature-store:
+            type: service
+            class: feast
+            id: ml-platform.feature-store
+            params:
+              offlineStore: bigquery
+              onlineStore: redis
+          inference-cache:
+            type: redis
+            class: cluster
+            id: ml-platform.inference-cache
+            params:
+              version: "7.2"
+              maxMemoryPolicy: volatile-lru
+              maxMemory: 4gb
+          prediction-log-db:
+            type: postgres
+            class: analytics
+            id: ml-platform.predictions
+            metadata:
+              annotations:
+                analytics.company.io/retention: "90d"
+            params:
+              version: "15"
+              extensions:
+                - timescaledb
+              partitioning:
+                type: time
+                interval: daily
+          experiment-db:
+            type: postgres
+            class: standard
+            id: ml-platform.experiments
+            params:
+              version: "15"
+              size: small
+          model-storage:
+            type: volume
+            class: nfs
+            id: ml-platform.models
+            metadata:
+              annotations:
+                storage.company.io/backup: "true"
+            params:
+              size: 500Gi
+              accessMode: ReadOnlyMany
+          model-cache:
+            type: volume
+            class: ssd
+            params:
+              size: 100Gi
+              accessMode: ReadWriteOnce
+          feature-cache:
+            type: volume
+            class: ephemeral
+            params:
+              size: 20Gi
+          observability:
+            type: service
+            id: shared.observability
+            params:
+              traces: true
+              metrics: true
+              logs: true
+              customMetrics:
+                - prediction_latency
+                - batch_size
+                - cache_hit_rate
+
+    # Workload List Example
+    WorkloadListExample:
+      summary: List of workloads
+      description: Example response for listing multiple workloads
+      value:
+        items:
+          - apiVersion: score.dev/v1b1
+            metadata:
+              name: ecommerce-frontend
+              annotations:
+                app.kubernetes.io/part-of: ecommerce-platform
+            containers:
+              frontend:
+                image: ghcr.io/myorg/ecommerce-frontend:2.5.0
+          - apiVersion: score.dev/v1b1
+            metadata:
+              name: data-pipeline-worker
+              annotations:
+                app.kubernetes.io/part-of: data-platform
+            containers:
+              worker:
+                image: 123456789012.dkr.ecr.us-west-2.amazonaws.com/data-worker:3.1.0
+          - apiVersion: score.dev/v1b1
+            metadata:
+              name: ml-inference-service
+              annotations:
+                app.kubernetes.io/part-of: ml-platform
+            containers:
+              model-server:
+                image: myacr.azurecr.io/ml-serving/inference-server:4.2.1
+        total: 3
+        limit: 10
+        offset: 0
+
+    # Ecommerce Containers Example
+    EcommerceContainersExample:
+      summary: E-commerce frontend containers
+      description: Container definitions for the e-commerce frontend workload
+      value:
+        frontend:
+          image: ghcr.io/myorg/ecommerce-frontend:2.5.0
+          command:
+            - /usr/bin/node
+          args:
+            - server.js
+            - --config=/etc/app/config.json
+          resources:
+            requests:
+              memory: 256M
+              cpu: 250m
+            limits:
+              memory: 1Gi
+              cpu: "1"
+        nginx-sidecar:
+          image: nginx:1.25-alpine
+          resources:
+            requests:
+              memory: 64M
+              cpu: 50m
+            limits:
+              memory: 128M
+              cpu: 200m
+
+    # Ecommerce Resources Example
+    EcommerceResourcesExample:
+      summary: E-commerce frontend resources
+      description: Resource definitions for the e-commerce frontend workload
+      value:
+        postgres-db:
+          type: postgres
+          class: managed
+          id: ecommerce.products
+        cache:
+          type: redis
+          class: cluster
+          id: ecommerce.session-cache
+        session-secrets:
+          type: secret
+          id: ecommerce.session
+        object-storage:
+          type: s3
+          class: standard
+          id: ecommerce.assets
+        uploads-volume:
+          type: volume
+          class: ssd
+        static-assets:
+          type: volume
+          class: standard
+          id: ecommerce.static
+        tls-certs:
+          type: secret
+          class: tls
+          id: ecommerce.tls
+        feature-flags:
+          type: service
+          id: shared.feature-flags
+
+    # Validation Success Example
+    ValidationSuccessExample:
+      summary: Successful validation
+      description: Example response when workload validation succeeds
+      value:
+        valid: true
+        errors: []
+        warnings:
+          - path: /containers/frontend/resources/limits/memory
+            message: Memory limit is relatively high, consider if this is necessary
+            code: RESOURCE_HIGH
+
+    # Validation Failure Example
+    ValidationFailureExample:
+      summary: Failed validation
+      description: Example response when workload validation fails
+      value:
+        valid: false
+        errors:
+          - path: /metadata/name
+            message: "Name 'Invalid_Name' does not match required pattern ^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"
+            code: PATTERN_MISMATCH
+          - path: /containers/app/image
+            message: Container image is required
+            code: REQUIRED_FIELD
+          - path: /service/ports/web/port
+            message: Port must be between 1 and 65535
+            code: VALUE_OUT_OF_RANGE
+        warnings: []
+
+    # Bad Request Error Example
+    BadRequestErrorExample:
+      summary: Bad request error
+      description: Example error response for invalid requests
+      value:
+        error:
+          code: BAD_REQUEST
+          message: Invalid workload specification
+          details:
+            validationErrors:
+              - path: /apiVersion
+                message: "apiVersion must be 'score.dev/v1b1'"
+
+    # Not Found Error Example
+    NotFoundErrorExample:
+      summary: Not found error
+      description: Example error response when workload is not found
+      value:
+        error:
+          code: NOT_FOUND
+          message: Workload 'my-workload' not found
+
+    # Conflict Error Example
+    ConflictErrorExample:
+      summary: Conflict error
+      description: Example error response when workload already exists
+      value:
+        error:
+          code: CONFLICT
+          message: Workload 'ecommerce-frontend' already exists
+
+    # Internal Error Example
+    InternalErrorExample:
+      summary: Internal server error
+      description: Example error response for server errors
+      value:
+        error:
+          code: INTERNAL_ERROR
+          message: An unexpected error occurred
+          details:
+            requestId: req-abc123
+
+  parameters:
+    WorkloadNameParam:
+      name: workloadName
+      in: path
+      required: true
+      description: The name of the workload
+      schema:
+        type: string
+        minLength: 2
+        maxLength: 63
+        pattern: ^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$
+      examples:
+        ecommerce:
+          value: ecommerce-frontend
+        dataPipeline:
+          value: data-pipeline-worker
+        mlService:
+          value: ml-inference-service
+
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+
+    OffsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+
+    NameFilterParam:
+      name: name
+      in: query
+      description: Filter workloads by name (partial match)
+      schema:
+        type: string
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            badRequest:
+              $ref: '#/components/examples/BadRequestErrorExample'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            notFound:
+              $ref: '#/components/examples/NotFoundErrorExample'
+
+    Conflict:
+      description: Resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            conflict:
+              $ref: '#/components/examples/ConflictErrorExample'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            internalError:
+              $ref: '#/components/examples/InternalErrorExample'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token authentication
+
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key authentication
+
+security:
+  - bearerAuth: []
+  - apiKey: []

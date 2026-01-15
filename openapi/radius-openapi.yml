@@ -1,0 +1,4251 @@
+openapi: 3.1.0
+info:
+  title: Radius API
+  description: |
+    OpenAPI 3.1 specification for Radius - a cloud-native application platform that enables 
+    developers to define, deploy, and collaborate on cloud-native applications across public 
+    clouds and private infrastructure.
+  version: 2023-10-01-preview
+  contact:
+    name: Radius Project
+    url: https://radapp.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: https://management.radapp.io
+    description: Radius Management API
+  - url: http://localhost:8080
+    description: Local Development
+
+tags:
+  - name: Applications
+    description: Application resource operations
+  - name: Containers
+    description: Container resource operations
+  - name: Environments
+    description: Environment resource operations
+  - name: Gateways
+    description: Gateway resource operations
+  - name: SecretStores
+    description: Secret store operations
+  - name: Volumes
+    description: Volume resource operations
+  - name: Extenders
+    description: Extender portable resource operations
+  - name: Dapr
+    description: Dapr component operations
+  - name: Datastores
+    description: Datastore portable resource operations
+  - name: Messaging
+    description: Messaging portable resource operations
+  - name: Planes
+    description: Plane management operations
+  - name: ResourceGroups
+    description: Resource group operations
+  - name: Credentials
+    description: Credential management operations
+
+paths:
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/applications:
+    get:
+      tags: [Applications]
+      summary: List applications
+      operationId: Applications_List
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResourceListResult'
+              examples:
+                applicationList:
+                  $ref: '#/components/examples/ApplicationListExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/applications/{applicationName}:
+    get:
+      tags: [Applications]
+      summary: Get application
+      operationId: Applications_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ApplicationNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResource'
+              examples:
+                ecommerceApplication:
+                  $ref: '#/components/examples/EcommerceApplicationExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    put:
+      tags: [Applications]
+      summary: Create or update application
+      operationId: Applications_CreateOrUpdate
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ApplicationNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationResource'
+            examples:
+              ecommerceApplication:
+                $ref: '#/components/examples/EcommerceApplicationExample'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResource'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResource'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    delete:
+      tags: [Applications]
+      summary: Delete application
+      operationId: Applications_Delete
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ApplicationNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: No Content
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/environments:
+    get:
+      tags: [Environments]
+      summary: List environments
+      operationId: Environments_List
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentResourceListResult'
+              examples:
+                environmentList:
+                  $ref: '#/components/examples/EnvironmentListExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/environments/{environmentName}:
+    get:
+      tags: [Environments]
+      summary: Get environment
+      operationId: Environments_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/EnvironmentNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentResource'
+              examples:
+                kubernetesEnvironment:
+                  $ref: '#/components/examples/KubernetesEnvironmentExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    put:
+      tags: [Environments]
+      summary: Create or update environment
+      operationId: Environments_CreateOrUpdate
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/EnvironmentNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentResource'
+            examples:
+              kubernetesEnvironment:
+                $ref: '#/components/examples/KubernetesEnvironmentExample'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentResource'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentResource'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    delete:
+      tags: [Environments]
+      summary: Delete environment
+      operationId: Environments_Delete
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/EnvironmentNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: No Content
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/containers:
+    get:
+      tags: [Containers]
+      summary: List containers
+      operationId: Containers_List
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerResourceListResult'
+              examples:
+                containerList:
+                  $ref: '#/components/examples/ContainerListExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/containers/{containerName}:
+    get:
+      tags: [Containers]
+      summary: Get container
+      operationId: Containers_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ContainerNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerResource'
+              examples:
+                orderServiceContainer:
+                  $ref: '#/components/examples/OrderServiceContainerExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    put:
+      tags: [Containers]
+      summary: Create or update container
+      operationId: Containers_CreateOrUpdate
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ContainerNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContainerResource'
+            examples:
+              orderServiceContainer:
+                $ref: '#/components/examples/OrderServiceContainerExample'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerResource'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerResource'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    delete:
+      tags: [Containers]
+      summary: Delete container
+      operationId: Containers_Delete
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ContainerNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: No Content
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/gateways/{gatewayName}:
+    get:
+      tags: [Gateways]
+      summary: Get gateway
+      operationId: Gateways_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/GatewayNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayResource'
+              examples:
+                ecommerceGateway:
+                  $ref: '#/components/examples/EcommerceGatewayExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    put:
+      tags: [Gateways]
+      summary: Create or update gateway
+      operationId: Gateways_CreateOrUpdate
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/GatewayNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GatewayResource'
+            examples:
+              ecommerceGateway:
+                $ref: '#/components/examples/EcommerceGatewayExample'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayResource'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayResource'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/secretStores/{secretStoreName}:
+    get:
+      tags: [SecretStores]
+      summary: Get secret store
+      operationId: SecretStores_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SecretStoreNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecretStoreResource'
+              examples:
+                genericSecretStore:
+                  $ref: '#/components/examples/GenericSecretStoreExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    put:
+      tags: [SecretStores]
+      summary: Create or update secret store
+      operationId: SecretStores_CreateOrUpdate
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SecretStoreNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SecretStoreResource'
+            examples:
+              genericSecretStore:
+                $ref: '#/components/examples/GenericSecretStoreExample'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecretStoreResource'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecretStoreResource'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/volumes/{volumeName}:
+    get:
+      tags: [Volumes]
+      summary: Get volume
+      operationId: Volumes_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/VolumeNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolumeResource'
+              examples:
+                azureKeyVaultVolume:
+                  $ref: '#/components/examples/AzureKeyVaultVolumeExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Core/extenders/{extenderName}:
+    get:
+      tags: [Extenders]
+      summary: Get extender
+      operationId: Extenders_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ExtenderNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtenderResource'
+              examples:
+                stripeExtender:
+                  $ref: '#/components/examples/StripeExtenderExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Datastores/mongoDatabases/{mongoDatabaseName}:
+    get:
+      tags: [Datastores]
+      summary: Get MongoDB database
+      operationId: MongoDatabases_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/MongoDatabaseNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MongoDatabaseResource'
+              examples:
+                ordersDatabase:
+                  $ref: '#/components/examples/OrdersMongoDatabaseExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Datastores/redisCaches/{redisCacheName}:
+    get:
+      tags: [Datastores]
+      summary: Get Redis cache
+      operationId: RedisCaches_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/RedisCacheNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedisCacheResource'
+              examples:
+                sessionCache:
+                  $ref: '#/components/examples/SessionCacheExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Datastores/sqlDatabases/{sqlDatabaseName}:
+    get:
+      tags: [Datastores]
+      summary: Get SQL database
+      operationId: SqlDatabases_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SqlDatabaseNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SqlDatabaseResource'
+              examples:
+                buildMetadataDatabase:
+                  $ref: '#/components/examples/BuildMetadataSqlDatabaseExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Messaging/rabbitMQQueues/{rabbitMQQueueName}:
+    get:
+      tags: [Messaging]
+      summary: Get RabbitMQ queue
+      operationId: RabbitMQQueues_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/RabbitMQQueueNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RabbitMQQueueResource'
+              examples:
+                orderEventsQueue:
+                  $ref: '#/components/examples/OrderEventsQueueExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Dapr/stateStores/{stateStoreName}:
+    get:
+      tags: [Dapr]
+      summary: Get Dapr state store
+      operationId: DaprStateStores_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/StateStoreNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DaprStateStoreResource'
+              examples:
+                redisStateStore:
+                  $ref: '#/components/examples/RedisStateStoreExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Dapr/pubSubBrokers/{pubSubBrokerName}:
+    get:
+      tags: [Dapr]
+      summary: Get Dapr pub/sub broker
+      operationId: DaprPubSubBrokers_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/PubSubBrokerNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DaprPubSubBrokerResource'
+              examples:
+                rabbitMQPubSub:
+                  $ref: '#/components/examples/RabbitMQPubSubExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Dapr/secretStores/{daprSecretStoreName}:
+    get:
+      tags: [Dapr]
+      summary: Get Dapr secret store
+      operationId: DaprSecretStores_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/DaprSecretStoreNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DaprSecretStoreResource'
+              examples:
+                keyVaultSecretStore:
+                  $ref: '#/components/examples/KeyVaultSecretStoreExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}/providers/Applications.Dapr/configurationStores/{configurationStoreName}:
+    get:
+      tags: [Dapr]
+      summary: Get Dapr configuration store
+      operationId: DaprConfigurationStores_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ConfigurationStoreNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DaprConfigurationStoreResource'
+              examples:
+                appConfigStore:
+                  $ref: '#/components/examples/AppConfigConfigurationStoreExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}:
+    get:
+      tags: [Planes]
+      summary: Get Radius plane
+      operationId: RadiusPlanes_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RadiusPlaneResource'
+              examples:
+                radiusPlane:
+                  $ref: '#/components/examples/RadiusPlaneExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/radius/{planeName}/resourceGroups/{resourceGroupName}:
+    get:
+      tags: [ResourceGroups]
+      summary: Get resource group
+      operationId: ResourceGroups_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceGroupResource'
+              examples:
+                resourceGroup:
+                  $ref: '#/components/examples/ResourceGroupExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/azure/{planeName}/providers/System.Azure/credentials/{credentialName}:
+    get:
+      tags: [Credentials]
+      summary: Get Azure credential
+      operationId: AzureCredentials_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/CredentialNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzureCredentialResource'
+              examples:
+                workloadIdentityCredential:
+                  $ref: '#/components/examples/AzureWorkloadIdentityCredentialExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /planes/aws/{planeName}/providers/System.AWS/credentials/{credentialName}:
+    get:
+      tags: [Credentials]
+      summary: Get AWS credential
+      operationId: AwsCredentials_Get
+      parameters:
+        - $ref: '#/components/parameters/PlaneNameParameter'
+        - $ref: '#/components/parameters/CredentialNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AwsCredentialResource'
+              examples:
+                irsaCredential:
+                  $ref: '#/components/examples/AwsIrsaCredentialExample'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+components:
+  parameters:
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation
+      schema:
+        type: string
+        default: '2023-10-01-preview'
+
+    PlaneNameParameter:
+      name: planeName
+      in: path
+      required: true
+      description: The name of the plane
+      schema:
+        type: string
+        pattern: ^[A-Za-z]([-A-Za-z0-9]*[A-Za-z0-9])?$
+        maxLength: 63
+
+    ResourceGroupNameParameter:
+      name: resourceGroupName
+      in: path
+      required: true
+      description: The name of the resource group
+      schema:
+        type: string
+        pattern: ^[A-Za-z]([-A-Za-z0-9]*[A-Za-z0-9])?$
+        maxLength: 63
+
+    ApplicationNameParameter:
+      name: applicationName
+      in: path
+      required: true
+      description: The name of the application
+      schema:
+        type: string
+
+    EnvironmentNameParameter:
+      name: environmentName
+      in: path
+      required: true
+      description: The name of the environment
+      schema:
+        type: string
+
+    ContainerNameParameter:
+      name: containerName
+      in: path
+      required: true
+      description: The name of the container
+      schema:
+        type: string
+
+    GatewayNameParameter:
+      name: gatewayName
+      in: path
+      required: true
+      description: The name of the gateway
+      schema:
+        type: string
+
+    SecretStoreNameParameter:
+      name: secretStoreName
+      in: path
+      required: true
+      description: The name of the secret store
+      schema:
+        type: string
+
+    VolumeNameParameter:
+      name: volumeName
+      in: path
+      required: true
+      description: The name of the volume
+      schema:
+        type: string
+
+    ExtenderNameParameter:
+      name: extenderName
+      in: path
+      required: true
+      description: The name of the extender
+      schema:
+        type: string
+
+    MongoDatabaseNameParameter:
+      name: mongoDatabaseName
+      in: path
+      required: true
+      description: The name of the MongoDB database
+      schema:
+        type: string
+
+    RedisCacheNameParameter:
+      name: redisCacheName
+      in: path
+      required: true
+      description: The name of the Redis cache
+      schema:
+        type: string
+
+    SqlDatabaseNameParameter:
+      name: sqlDatabaseName
+      in: path
+      required: true
+      description: The name of the SQL database
+      schema:
+        type: string
+
+    RabbitMQQueueNameParameter:
+      name: rabbitMQQueueName
+      in: path
+      required: true
+      description: The name of the RabbitMQ queue
+      schema:
+        type: string
+
+    StateStoreNameParameter:
+      name: stateStoreName
+      in: path
+      required: true
+      description: The name of the Dapr state store
+      schema:
+        type: string
+
+    PubSubBrokerNameParameter:
+      name: pubSubBrokerName
+      in: path
+      required: true
+      description: The name of the Dapr pub/sub broker
+      schema:
+        type: string
+
+    DaprSecretStoreNameParameter:
+      name: daprSecretStoreName
+      in: path
+      required: true
+      description: The name of the Dapr secret store
+      schema:
+        type: string
+
+    ConfigurationStoreNameParameter:
+      name: configurationStoreName
+      in: path
+      required: true
+      description: The name of the Dapr configuration store
+      schema:
+        type: string
+
+    CredentialNameParameter:
+      name: credentialName
+      in: path
+      required: true
+      description: The name of the credential
+      schema:
+        type: string
+
+  responses:
+    ErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: Error code
+                  message:
+                    type: string
+                    description: Error message
+                  target:
+                    type: string
+                    description: Error target
+                required:
+                  - code
+                  - message
+            required:
+              - error
+
+  schemas:
+    ProvisioningState:
+      type: string
+      description: Provisioning state of the resource at the time the operation was called
+      enum: [Creating, Updating, Deleting, Accepted, Provisioning, Succeeded, Failed, Canceled]
+      readOnly: true
+
+    ResourceProvisioning:
+      type: string
+      description: Specifies how the underlying service/resource is provisioned and managed
+      enum: [recipe, manual]
+
+    IdentitySettingKind:
+      type: string
+      description: IdentitySettingKind is the kind of supported external identity setting
+      enum: [undefined, azure.com.workload, aws.com.irsa, userAssigned, systemAssigned, systemAssignedUserAssigned]
+
+    IdentitySettings:
+      type: object
+      description: IdentitySettings is the external identity setting
+      properties:
+        kind:
+          $ref: '#/components/schemas/IdentitySettingKind'
+        oidcIssuer:
+          type: string
+          description: The URI for your compute platform's OIDC issuer
+        resource:
+          type: string
+          description: The resource ID of the provisioned identity
+        managedIdentity:
+          type: array
+          items:
+            type: string
+      required: [kind]
+
+    ResourceReference:
+      type: object
+      description: Describes a reference to an existing resource
+      properties:
+        id:
+          type: string
+          description: Resource id of an existing resource
+      required: [id]
+
+    Recipe:
+      type: object
+      description: The recipe used to automatically deploy underlying infrastructure
+      properties:
+        name:
+          type: string
+          description: The name of the recipe within the environment to use
+        parameters:
+          type: object
+          description: Key/value parameters to pass into the recipe at deployment
+      required: [name]
+
+    RecipeStatus:
+      type: object
+      description: Recipe status at deployment time
+      properties:
+        templateKind:
+          type: string
+        templatePath:
+          type: string
+        templateVersion:
+          type: string
+      required: [templateKind, templatePath]
+
+    OutputResource:
+      type: object
+      description: Properties of an output resource
+      properties:
+        localId:
+          type: string
+        id:
+          type: string
+        radiusManaged:
+          type: boolean
+
+    ResourceStatus:
+      type: object
+      description: Status of a resource
+      properties:
+        compute:
+          $ref: '#/components/schemas/EnvironmentCompute'
+        recipe:
+          $ref: '#/components/schemas/RecipeStatus'
+          readOnly: true
+        outputResources:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputResource'
+
+    SecretReference:
+      type: object
+      description: Reference to a secret in a secret store
+      properties:
+        source:
+          type: string
+          description: The ID of an Applications.Core/SecretStore resource
+        key:
+          type: string
+          description: The key for the secret in the secret store
+      required: [source, key]
+
+    EnvironmentCompute:
+      type: object
+      description: Represents backing compute resource
+      properties:
+        kind:
+          type: string
+        resourceId:
+          type: string
+        identity:
+          $ref: '#/components/schemas/IdentitySettings'
+      required: [kind]
+      discriminator:
+        propertyName: kind
+        mapping:
+          kubernetes: '#/components/schemas/KubernetesCompute'
+          aci: '#/components/schemas/AzureContainerInstanceCompute'
+
+    KubernetesCompute:
+      allOf:
+        - $ref: '#/components/schemas/EnvironmentCompute'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [kubernetes]
+            namespace:
+              type: string
+          required: [kind, namespace]
+
+    AzureContainerInstanceCompute:
+      allOf:
+        - $ref: '#/components/schemas/EnvironmentCompute'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [aci]
+            resourceGroup:
+              type: string
+          required: [kind]
+
+    Providers:
+      type: object
+      description: The Cloud providers configuration
+      properties:
+        azure:
+          $ref: '#/components/schemas/ProvidersAzure'
+        aws:
+          $ref: '#/components/schemas/ProvidersAws'
+
+    ProvidersAzure:
+      type: object
+      properties:
+        scope:
+          type: string
+          description: Target scope for Azure resources
+      required: [scope]
+
+    ProvidersAws:
+      type: object
+      properties:
+        scope:
+          type: string
+          description: Target scope for AWS resources
+      required: [scope]
+
+    Extension:
+      type: object
+      description: Extension of a environment/application resource
+      properties:
+        kind:
+          type: string
+      required: [kind]
+      discriminator:
+        propertyName: kind
+        mapping:
+          kubernetesMetadata: '#/components/schemas/KubernetesMetadataExtension'
+          kubernetesNamespace: '#/components/schemas/KubernetesNamespaceExtension'
+          manualScaling: '#/components/schemas/ManualScalingExtension'
+          daprSidecar: '#/components/schemas/DaprSidecarExtension'
+          aci: '#/components/schemas/AzureContainerInstanceExtension'
+
+    KubernetesMetadataExtension:
+      allOf:
+        - $ref: '#/components/schemas/Extension'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [kubernetesMetadata]
+            annotations:
+              type: object
+              additionalProperties:
+                type: string
+            labels:
+              type: object
+              additionalProperties:
+                type: string
+          required: [kind]
+
+    KubernetesNamespaceExtension:
+      allOf:
+        - $ref: '#/components/schemas/Extension'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [kubernetesNamespace]
+            namespace:
+              type: string
+          required: [kind, namespace]
+
+    ManualScalingExtension:
+      allOf:
+        - $ref: '#/components/schemas/Extension'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [manualScaling]
+            replicas:
+              type: integer
+              format: int32
+          required: [kind, replicas]
+
+    DaprSidecarExtension:
+      allOf:
+        - $ref: '#/components/schemas/Extension'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [daprSidecar]
+            appPort:
+              type: integer
+              format: int32
+            appId:
+              type: string
+            config:
+              type: string
+            protocol:
+              type: string
+              enum: [http, grpc]
+          required: [kind, appId]
+
+    AzureContainerInstanceExtension:
+      allOf:
+        - $ref: '#/components/schemas/Extension'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [aci]
+            resourceGroup:
+              type: string
+          required: [kind, resourceGroup]
+
+    RecipeProperties:
+      type: object
+      description: Recipe properties
+      properties:
+        templateKind:
+          type: string
+        templatePath:
+          type: string
+        parameters:
+          type: object
+      required: [templateKind, templatePath]
+
+    BicepRecipeProperties:
+      allOf:
+        - $ref: '#/components/schemas/RecipeProperties'
+        - type: object
+          properties:
+            templateKind:
+              type: string
+              enum: [bicep]
+            plainHttp:
+              type: boolean
+
+    TerraformRecipeProperties:
+      allOf:
+        - $ref: '#/components/schemas/RecipeProperties'
+        - type: object
+          properties:
+            templateKind:
+              type: string
+              enum: [terraform]
+            templateVersion:
+              type: string
+
+    RecipeConfigProperties:
+      type: object
+      properties:
+        terraform:
+          $ref: '#/components/schemas/TerraformConfigProperties'
+        bicep:
+          $ref: '#/components/schemas/BicepConfigProperties'
+        env:
+          type: object
+          additionalProperties:
+            type: string
+        envSecrets:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SecretReference'
+
+    TerraformConfigProperties:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/AuthConfig'
+        providers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProviderConfigProperties'
+
+    BicepConfigProperties:
+      type: object
+      properties:
+        authentication:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RegistrySecretConfig'
+
+    AuthConfig:
+      type: object
+      properties:
+        git:
+          $ref: '#/components/schemas/GitAuthConfig'
+
+    GitAuthConfig:
+      type: object
+      properties:
+        pat:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SecretConfig'
+
+    SecretConfig:
+      type: object
+      properties:
+        secret:
+          type: string
+
+    RegistrySecretConfig:
+      type: object
+      properties:
+        secret:
+          type: string
+
+    ProviderConfigProperties:
+      type: object
+      properties:
+        secrets:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SecretReference'
+      additionalProperties: true
+
+    # Application Resources
+    ApplicationProperties:
+      type: object
+      properties:
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        environment:
+          type: string
+          description: Fully qualified resource ID for the environment
+        extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+      required: [environment]
+
+    ApplicationResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/ApplicationProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    ApplicationResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Environment Resources
+    EnvironmentProperties:
+      type: object
+      properties:
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        compute:
+          $ref: '#/components/schemas/EnvironmentCompute'
+        providers:
+          $ref: '#/components/schemas/Providers'
+        simulated:
+          type: boolean
+        recipes:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/RecipeProperties'
+        recipeConfig:
+          $ref: '#/components/schemas/RecipeConfigProperties'
+        extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+      required: [compute]
+
+    EnvironmentResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/EnvironmentProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    EnvironmentResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnvironmentResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Container Resources
+    Container:
+      type: object
+      properties:
+        image:
+          type: string
+        imagePullPolicy:
+          type: string
+          enum: [Always, IfNotPresent, Never]
+        env:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EnvironmentVariable'
+        ports:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ContainerPortProperties'
+        readinessProbe:
+          $ref: '#/components/schemas/HealthProbeProperties'
+        livenessProbe:
+          $ref: '#/components/schemas/HealthProbeProperties'
+        volumes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Volume'
+        command:
+          type: array
+          items:
+            type: string
+        args:
+          type: array
+          items:
+            type: string
+        workingDir:
+          type: string
+      required: [image]
+
+    EnvironmentVariable:
+      type: object
+      properties:
+        value:
+          type: string
+        valueFrom:
+          $ref: '#/components/schemas/EnvironmentVariableReference'
+
+    EnvironmentVariableReference:
+      type: object
+      properties:
+        secretRef:
+          $ref: '#/components/schemas/SecretReference'
+      required: [secretRef]
+
+    ContainerPortProperties:
+      type: object
+      properties:
+        containerPort:
+          type: integer
+          format: int32
+        protocol:
+          type: string
+          enum: [TCP, UDP]
+        scheme:
+          type: string
+        port:
+          type: integer
+          format: int32
+      required: [containerPort]
+
+    HealthProbeProperties:
+      type: object
+      properties:
+        kind:
+          type: string
+        initialDelaySeconds:
+          type: number
+        failureThreshold:
+          type: number
+        periodSeconds:
+          type: number
+        timeoutSeconds:
+          type: number
+          default: 5
+      required: [kind]
+      discriminator:
+        propertyName: kind
+        mapping:
+          httpGet: '#/components/schemas/HttpGetHealthProbeProperties'
+          tcp: '#/components/schemas/TcpHealthProbeProperties'
+          exec: '#/components/schemas/ExecHealthProbeProperties'
+
+    HttpGetHealthProbeProperties:
+      allOf:
+        - $ref: '#/components/schemas/HealthProbeProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [httpGet]
+            containerPort:
+              type: integer
+              format: int32
+            path:
+              type: string
+            headers:
+              type: object
+              additionalProperties:
+                type: string
+          required: [kind, containerPort, path]
+
+    TcpHealthProbeProperties:
+      allOf:
+        - $ref: '#/components/schemas/HealthProbeProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [tcp]
+            containerPort:
+              type: integer
+              format: int32
+          required: [kind, containerPort]
+
+    ExecHealthProbeProperties:
+      allOf:
+        - $ref: '#/components/schemas/HealthProbeProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [exec]
+            command:
+              type: string
+          required: [kind, command]
+
+    Volume:
+      type: object
+      properties:
+        kind:
+          type: string
+        mountPath:
+          type: string
+      required: [kind]
+
+    PersistentVolume:
+      allOf:
+        - $ref: '#/components/schemas/Volume'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [persistent]
+            permission:
+              type: string
+              enum: [read, write]
+            source:
+              type: string
+          required: [kind, source]
+
+    EphemeralVolume:
+      allOf:
+        - $ref: '#/components/schemas/Volume'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [ephemeral]
+            managedStore:
+              type: string
+              enum: [memory, disk]
+          required: [kind, managedStore]
+
+    ConnectionProperties:
+      type: object
+      properties:
+        source:
+          type: string
+        disableDefaultEnvVars:
+          type: boolean
+        iam:
+          $ref: '#/components/schemas/IamProperties'
+      required: [source]
+
+    IamProperties:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [azure, aws]
+        roles:
+          type: array
+          items:
+            type: string
+      required: [kind]
+
+    RuntimesProperties:
+      type: object
+      properties:
+        kubernetes:
+          $ref: '#/components/schemas/KubernetesRuntimeProperties'
+        aci:
+          $ref: '#/components/schemas/ACIRuntimeProperties'
+
+    KubernetesRuntimeProperties:
+      type: object
+      properties:
+        base:
+          type: string
+        pod:
+          type: object
+          additionalProperties: true
+
+    ACIRuntimeProperties:
+      type: object
+      properties:
+        gatewayID:
+          type: string
+
+    ContainerProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        container:
+          $ref: '#/components/schemas/Container'
+        connections:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ConnectionProperties'
+        identity:
+          $ref: '#/components/schemas/IdentitySettings'
+        extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+        resourceProvisioning:
+          type: string
+          enum: [internal, manual]
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceReference'
+        restartPolicy:
+          type: string
+          enum: [Always, OnFailure, Never]
+        runtimes:
+          $ref: '#/components/schemas/RuntimesProperties'
+      required: [application, container]
+
+    ContainerResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/ContainerProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    ContainerResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContainerResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Gateway Resources
+    GatewayHostname:
+      type: object
+      properties:
+        prefix:
+          type: string
+        fullyQualifiedHostname:
+          type: string
+
+    GatewayRoute:
+      type: object
+      properties:
+        path:
+          type: string
+        destination:
+          type: string
+        replacePrefix:
+          type: string
+        enableWebsockets:
+          type: boolean
+        timeoutPolicy:
+          $ref: '#/components/schemas/GatewayRouteTimeoutPolicy'
+
+    GatewayRouteTimeoutPolicy:
+      type: object
+      properties:
+        request:
+          type: string
+          pattern: ^(\d+(\.\d+)?(ns|us|µs|ms|s|m|h))+$
+        backendRequest:
+          type: string
+          pattern: ^(\d+(\.\d+)?(ns|us|µs|ms|s|m|h))+$
+
+    GatewayTls:
+      type: object
+      properties:
+        sslPassthrough:
+          type: boolean
+        minimumProtocolVersion:
+          type: string
+          default: '1.2'
+          enum: ['1.2', '1.3']
+        certificateFrom:
+          type: string
+
+    GatewayProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        internal:
+          type: boolean
+        hostname:
+          $ref: '#/components/schemas/GatewayHostname'
+        routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GatewayRoute'
+        tls:
+          $ref: '#/components/schemas/GatewayTls'
+        url:
+          type: string
+          readOnly: true
+      required: [application, routes]
+
+    GatewayResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/GatewayProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    GatewayResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/GatewayResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # SecretStore Resources
+    SecretValueProperties:
+      type: object
+      properties:
+        encoding:
+          type: string
+          default: raw
+          enum: [raw, base64]
+        value:
+          type: string
+          format: password
+        valueFrom:
+          $ref: '#/components/schemas/ValueFromProperties'
+
+    ValueFromProperties:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+      required: [name]
+
+    SecretStoreProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        type:
+          type: string
+          default: generic
+          enum: [generic, certificate, basicAuthentication, azureWorkloadIdentity, awsIRSA]
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SecretValueProperties'
+        resource:
+          type: string
+      required: [data]
+
+    SecretStoreResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/SecretStoreProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    SecretStoreResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SecretStoreResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Volume Resources
+    CertificateObjectProperties:
+      type: object
+      properties:
+        alias:
+          type: string
+        encoding:
+          type: string
+          default: utf-8
+          enum: [utf-8, hex, base64]
+        format:
+          type: string
+          default: pem
+          enum: [pem, pfx]
+        name:
+          type: string
+        certType:
+          type: string
+          enum: [certificate, privatekey, publickey]
+        version:
+          type: string
+      required: [name]
+
+    KeyObjectProperties:
+      type: object
+      properties:
+        alias:
+          type: string
+        name:
+          type: string
+        version:
+          type: string
+      required: [name]
+
+    SecretObjectProperties:
+      type: object
+      properties:
+        alias:
+          type: string
+        encoding:
+          type: string
+          default: utf-8
+          enum: [utf-8, hex, base64]
+        name:
+          type: string
+        version:
+          type: string
+      required: [name]
+
+    VolumeProperties:
+      type: object
+      properties:
+        kind:
+          type: string
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+      required: [kind, application]
+
+    AzureKeyVaultVolumeProperties:
+      allOf:
+        - $ref: '#/components/schemas/VolumeProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [azure.com.keyvault]
+            certificates:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/CertificateObjectProperties'
+            keys:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/KeyObjectProperties'
+            resource:
+              type: string
+            secrets:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/SecretObjectProperties'
+          required: [kind, resource, application]
+
+    VolumeResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/VolumeProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    VolumeResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/VolumeResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Extender Resources
+    ExtenderProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        secrets:
+          type: object
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+      additionalProperties: true
+
+    ExtenderResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/ExtenderProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    ExtenderResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExtenderResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # MongoDB Resources
+    MongoDatabaseSecrets:
+      type: object
+      properties:
+        password:
+          type: string
+        connectionString:
+          type: string
+
+    MongoDatabaseProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        secrets:
+          $ref: '#/components/schemas/MongoDatabaseSecrets'
+        host:
+          type: string
+        port:
+          type: integer
+          format: int32
+        database:
+          type: string
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceReference'
+        username:
+          type: string
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+
+    MongoDatabaseResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/MongoDatabaseProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    MongoDatabaseResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/MongoDatabaseResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Redis Resources
+    RedisCacheSecrets:
+      type: object
+      properties:
+        connectionString:
+          type: string
+        password:
+          type: string
+        url:
+          type: string
+
+    RedisCacheProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        secrets:
+          $ref: '#/components/schemas/RedisCacheSecrets'
+        host:
+          type: string
+        port:
+          type: integer
+          format: int32
+        username:
+          type: string
+        tls:
+          type: boolean
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceReference'
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+
+    RedisCacheResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/RedisCacheProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    RedisCacheResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/RedisCacheResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # SQL Resources
+    SqlDatabaseSecrets:
+      type: object
+      properties:
+        password:
+          type: string
+        connectionString:
+          type: string
+
+    SqlDatabaseProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        database:
+          type: string
+        server:
+          type: string
+        port:
+          type: integer
+          format: int32
+        username:
+          type: string
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceReference'
+        secrets:
+          $ref: '#/components/schemas/SqlDatabaseSecrets'
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+
+    SqlDatabaseResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/SqlDatabaseProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    SqlDatabaseResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SqlDatabaseResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # RabbitMQ Resources
+    RabbitMQSecrets:
+      type: object
+      properties:
+        password:
+          type: string
+        uri:
+          type: string
+
+    RabbitMQQueueProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        secrets:
+          $ref: '#/components/schemas/RabbitMQSecrets'
+        queue:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+          format: int32
+        vHost:
+          type: string
+        username:
+          type: string
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceReference'
+        tls:
+          type: boolean
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+
+    RabbitMQQueueResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/RabbitMQQueueProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    RabbitMQQueueResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/RabbitMQQueueResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Dapr Resources
+    MetadataValue:
+      type: object
+      properties:
+        value:
+          type: string
+        secretKeyRef:
+          $ref: '#/components/schemas/MetadataValueFromSecret'
+
+    MetadataValueFromSecret:
+      type: object
+      properties:
+        name:
+          type: string
+        key:
+          type: string
+      required: [name, key]
+
+    DaprResourceAuth:
+      type: object
+      properties:
+        secretStore:
+          type: string
+
+    DaprStateStoreProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        componentName:
+          type: string
+          readOnly: true
+        metadata:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MetadataValue'
+        type:
+          type: string
+        version:
+          type: string
+        auth:
+          $ref: '#/components/schemas/DaprResourceAuth'
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceReference'
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+
+    DaprStateStoreResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/DaprStateStoreProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    DaprStateStoreResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaprStateStoreResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    DaprPubSubBrokerProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        componentName:
+          type: string
+          readOnly: true
+        metadata:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MetadataValue'
+        type:
+          type: string
+        version:
+          type: string
+        auth:
+          $ref: '#/components/schemas/DaprResourceAuth'
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceReference'
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+
+    DaprPubSubBrokerResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/DaprPubSubBrokerProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    DaprPubSubBrokerResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaprPubSubBrokerResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    DaprSecretStoreProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        componentName:
+          type: string
+          readOnly: true
+        metadata:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MetadataValue'
+        type:
+          type: string
+        version:
+          type: string
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+
+    DaprSecretStoreResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/DaprSecretStoreProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    DaprSecretStoreResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaprSecretStoreResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    DaprConfigurationStoreProperties:
+      type: object
+      properties:
+        environment:
+          type: string
+        application:
+          type: string
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+          readOnly: true
+        componentName:
+          type: string
+          readOnly: true
+        metadata:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MetadataValue'
+        type:
+          type: string
+        version:
+          type: string
+        auth:
+          $ref: '#/components/schemas/DaprResourceAuth'
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceReference'
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        resourceProvisioning:
+          $ref: '#/components/schemas/ResourceProvisioning'
+      required: [environment]
+
+    DaprConfigurationStoreResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/DaprConfigurationStoreProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    DaprConfigurationStoreResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaprConfigurationStoreResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Plane Resources
+    RadiusPlaneResourceProperties:
+      type: object
+      properties:
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+        resourceProviders:
+          type: object
+          additionalProperties:
+            type: string
+      required: [resourceProviders]
+
+    RadiusPlaneResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/RadiusPlaneResourceProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    RadiusPlaneResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/RadiusPlaneResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # ResourceGroup Resources
+    ResourceGroupProperties:
+      type: object
+      properties:
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+
+    ResourceGroupResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/ResourceGroupProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+
+    ResourceGroupResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceGroupResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # Azure Credential Resources
+    CredentialStorageProperties:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [Internal]
+      required: [kind]
+
+    InternalCredentialStorageProperties:
+      allOf:
+        - $ref: '#/components/schemas/CredentialStorageProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [Internal]
+            secretName:
+              type: string
+              readOnly: true
+          required: [kind]
+
+    AzureCredentialProperties:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [ServicePrincipal, WorkloadIdentity]
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+      required: [kind]
+
+    AzureServicePrincipalProperties:
+      allOf:
+        - $ref: '#/components/schemas/AzureCredentialProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [ServicePrincipal]
+            clientId:
+              type: string
+            clientSecret:
+              type: string
+            tenantId:
+              type: string
+            storage:
+              $ref: '#/components/schemas/CredentialStorageProperties'
+          required: [kind, clientId, clientSecret, tenantId, storage]
+
+    AzureWorkloadIdentityProperties:
+      allOf:
+        - $ref: '#/components/schemas/AzureCredentialProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [WorkloadIdentity]
+            clientId:
+              type: string
+            tenantId:
+              type: string
+            storage:
+              $ref: '#/components/schemas/CredentialStorageProperties'
+          required: [kind, clientId, tenantId, storage]
+
+    AzureCredentialResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/AzureCredentialProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    AzureCredentialResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/AzureCredentialResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+    # AWS Credential Resources
+    AwsCredentialProperties:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [AccessKey, IRSA]
+        provisioningState:
+          $ref: '#/components/schemas/ProvisioningState'
+          readOnly: true
+      required: [kind]
+
+    AwsAccessKeyCredentialProperties:
+      allOf:
+        - $ref: '#/components/schemas/AwsCredentialProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [AccessKey]
+            accessKeyId:
+              type: string
+              format: password
+            secretAccessKey:
+              type: string
+              format: password
+            storage:
+              $ref: '#/components/schemas/CredentialStorageProperties'
+          required: [kind, accessKeyId, secretAccessKey, storage]
+
+    AwsIRSACredentialProperties:
+      allOf:
+        - $ref: '#/components/schemas/AwsCredentialProperties'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum: [IRSA]
+            roleARN:
+              type: string
+            storage:
+              $ref: '#/components/schemas/CredentialStorageProperties'
+          required: [kind, roleARN, storage]
+
+    AwsCredentialResource:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/AwsCredentialProperties'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        systemData:
+          type: object
+          readOnly: true
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        location:
+          type: string
+      required: [properties, location]
+
+    AwsCredentialResourceListResult:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/AwsCredentialResource'
+        nextLink:
+          type: string
+          format: uri
+      required: [value]
+
+  examples:
+    # Application Examples
+    ApplicationListExample:
+      summary: List of applications
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              extensions:
+                - kind: kubernetesNamespace
+                  namespace: ecommerce-app
+                - kind: kubernetesMetadata
+                  annotations:
+                    app.kubernetes.io/managed-by: radius
+                  labels:
+                    app.kubernetes.io/name: ecommerce-platform
+                    app.kubernetes.io/version: '2.5.0'
+            location: eastus
+            tags:
+              application: ecommerce-platform
+              version: '2.5.0'
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+            name: ecommerce-platform
+            type: Applications.Core/applications
+
+    EcommerceApplicationExample:
+      summary: E-commerce application
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          extensions:
+            - kind: kubernetesNamespace
+              namespace: ecommerce-app
+            - kind: kubernetesMetadata
+              annotations:
+                app.kubernetes.io/managed-by: radius
+              labels:
+                app.kubernetes.io/name: ecommerce-platform
+                app.kubernetes.io/version: '2.5.0'
+        location: eastus
+        tags:
+          application: ecommerce-platform
+          version: '2.5.0'
+
+    # Environment Examples
+    EnvironmentListExample:
+      summary: List of environments
+      value:
+        value:
+          - properties:
+              compute:
+                kind: kubernetes
+                namespace: ecommerce-prod
+              provisioningState: Succeeded
+            location: eastus
+            tags:
+              environment: production
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+            name: prod
+            type: Applications.Core/environments
+
+    KubernetesEnvironmentExample:
+      summary: Kubernetes environment with Azure and AWS providers
+      value:
+        properties:
+          compute:
+            kind: kubernetes
+            namespace: ecommerce-prod
+            identity:
+              kind: azure.com.workload
+              oidcIssuer: https://eastus.oic.prod-aks.azure.com/00000000-0000-0000-0000-000000000000/
+              resource: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ecommerce-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ecommerce-identity
+          providers:
+            azure:
+              scope: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ecommerce-rg
+            aws:
+              scope: /planes/aws/aws/accounts/123456789012/regions/us-east-1
+          recipes:
+            Applications.Datastores/redisCaches:
+              default:
+                templateKind: bicep
+                templatePath: ghcr.io/myorg/recipes/redis:1.0.0
+                parameters:
+                  sku: Premium
+                  capacity: 2
+            Applications.Datastores/mongoDatabases:
+              default:
+                templateKind: terraform
+                templatePath: Azure/cosmosdb/azurerm
+                templateVersion: '3.0.0'
+                parameters:
+                  consistency_level: Session
+          recipeConfig:
+            terraform:
+              authentication:
+                git:
+                  pat:
+                    github.com:
+                      secret: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/secretStores/git-credentials
+            env:
+              TF_LOG: INFO
+          extensions:
+            - kind: kubernetesMetadata
+              annotations:
+                prometheus.io/scrape: 'true'
+                prometheus.io/port: '9090'
+              labels:
+                team: platform
+          simulated: false
+        location: eastus
+        tags:
+          environment: production
+          project: ecommerce
+
+    # Container Examples
+    ContainerListExample:
+      summary: List of containers
+      value:
+        value:
+          - properties:
+              application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+              container:
+                image: ghcr.io/myorg/order-service:2.5.0
+              provisioningState: Succeeded
+            location: eastus
+            tags:
+              service: order-service
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/containers/orderService
+            name: orderService
+            type: Applications.Core/containers
+
+    OrderServiceContainerExample:
+      summary: Order service container with full configuration
+      value:
+        properties:
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          container:
+            image: ghcr.io/myorg/order-service:2.5.0
+            imagePullPolicy: IfNotPresent
+            env:
+              ASPNETCORE_ENVIRONMENT:
+                value: Production
+              LOG_LEVEL:
+                value: Information
+              DB_PASSWORD:
+                valueFrom:
+                  secretRef:
+                    source: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/secretStores/db-secrets
+                    key: password
+            ports:
+              http:
+                containerPort: 8080
+                protocol: TCP
+                scheme: http
+                port: 80
+              grpc:
+                containerPort: 9090
+                protocol: TCP
+            readinessProbe:
+              kind: httpGet
+              containerPort: 8080
+              path: /health/ready
+              headers:
+                X-Health-Check: readiness
+              initialDelaySeconds: 10
+              periodSeconds: 5
+              failureThreshold: 3
+            livenessProbe:
+              kind: httpGet
+              containerPort: 8080
+              path: /health/live
+              initialDelaySeconds: 15
+              periodSeconds: 10
+            volumes:
+              config:
+                kind: persistent
+                source: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/volumes/order-config
+                mountPath: /app/config
+                permission: read
+              temp:
+                kind: ephemeral
+                managedStore: memory
+                mountPath: /tmp
+            command:
+              - dotnet
+            args:
+              - OrderService.dll
+              - '--urls'
+              - http://+:8080
+            workingDir: /app
+          connections:
+            mongodb:
+              source: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Datastores/mongoDatabases/orders-db
+              iam:
+                kind: azure
+                roles:
+                  - DocumentDB Account Contributor
+            redis:
+              source: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Datastores/redisCaches/session-cache
+          identity:
+            kind: azure.com.workload
+            oidcIssuer: https://eastus.oic.prod-aks.azure.com/00000000-0000-0000-0000-000000000000/
+            resource: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ecommerce-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/order-service-identity
+          extensions:
+            - kind: daprSidecar
+              appId: order-service
+              appPort: 8080
+              config: tracing-config
+              protocol: http
+            - kind: manualScaling
+              replicas: 3
+          resourceProvisioning: internal
+          restartPolicy: Always
+          runtimes:
+            kubernetes:
+              base: |
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: order-service
+              pod:
+                nodeSelector:
+                  kubernetes.io/os: linux
+        location: eastus
+        tags:
+          service: order-service
+          tier: backend
+
+    # Gateway Examples
+    EcommerceGatewayExample:
+      summary: E-commerce gateway with TLS and routing
+      value:
+        properties:
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          internal: false
+          hostname:
+            fullyQualifiedHostname: api.ecommerce.example.com
+          routes:
+            - path: /api/orders
+              destination: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/containers/orderService
+              replacePrefix: /orders
+              enableWebsockets: false
+              timeoutPolicy:
+                request: 30s
+                backendRequest: 25s
+            - path: /api/products
+              destination: http://product-service:8080
+              enableWebsockets: false
+              timeoutPolicy:
+                request: 15s
+            - path: /ws
+              destination: http://notification-service:8080
+              enableWebsockets: true
+          tls:
+            sslPassthrough: false
+            minimumProtocolVersion: '1.2'
+            certificateFrom: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/secretStores/tls-cert
+        location: eastus
+        tags:
+          component: ingress
+          tier: edge
+
+    # SecretStore Examples
+    GenericSecretStoreExample:
+      summary: Generic secret store with database credentials
+      value:
+        properties:
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          type: generic
+          data:
+            username:
+              encoding: raw
+              value: ecommerce_admin
+            password:
+              encoding: base64
+              value: c3VwZXJzZWNyZXRwYXNzd29yZA==
+        location: eastus
+        tags:
+          secret-type: database
+
+    CertificateSecretStoreExample:
+      summary: Certificate secret store with Azure Key Vault
+      value:
+        properties:
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          type: certificate
+          resource: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ecommerce-rg/providers/Microsoft.KeyVault/vaults/ecommerce-kv
+          data:
+            tls.crt:
+              valueFrom:
+                name: api-certificate
+                version: latest
+            tls.key:
+              valueFrom:
+                name: api-certificate-key
+                version: latest
+        location: eastus
+        tags:
+          secret-type: tls
+
+    AwsIrsaSecretStoreExample:
+      summary: AWS IRSA secret store
+      value:
+        properties:
+          type: awsIRSA
+          data:
+            roleArn:
+              encoding: raw
+              value: arn:aws:iam::123456789012:role/iot-platform-role
+        location: us-west-2
+
+    # Volume Examples
+    AzureKeyVaultVolumeExample:
+      summary: Azure Key Vault volume with secrets and certificates
+      value:
+        properties:
+          kind: azure.com.keyvault
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resource: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ecommerce-rg/providers/Microsoft.KeyVault/vaults/ecommerce-config-kv
+          secrets:
+            api-key:
+              name: order-service-api-key
+              version: v1
+              alias: api-key.txt
+              encoding: utf-8
+            signing-key:
+              name: jwt-signing-key
+              alias: signing-key.pem
+              encoding: base64
+          certificates:
+            client-cert:
+              name: client-certificate
+              alias: client.pfx
+              format: pfx
+              certType: certificate
+          keys:
+            encryption-key:
+              name: data-encryption-key
+              alias: encryption.key
+        location: eastus
+        tags:
+          volume-type: config
+
+    # Extender Examples
+    StripeExtenderExample:
+      summary: Stripe payment gateway extender
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resourceProvisioning: recipe
+          recipe:
+            name: stripe-gateway
+            parameters:
+              apiVersion: '2023-10-16'
+              webhookEndpoint: /api/webhooks/stripe
+          stripeAccountId: acct_xxxxx
+          enabledPaymentMethods:
+            - card
+            - sepa_debit
+            - ideal
+          secrets:
+            apiKey: sk_live_xxxxx
+            webhookSecret: whsec_xxxxx
+        location: eastus
+        tags:
+          extender: payment-gateway
+          provider: stripe
+
+    IoTHubExtenderExample:
+      summary: IoT Hub extender for AWS
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/applications/iot-data-platform
+          resourceProvisioning: manual
+          iotHubEndpoint: iot-hub.us-west-2.amazonaws.com
+          deviceProvisioningService: dps.us-west-2.amazonaws.com
+          firmwareUpdateBucket: s3://iot-firmware-updates-bucket
+          secrets:
+            iotHubConnectionString: HostName=iot-hub.us-west-2.amazonaws.com;SharedAccessKeyName=iothubowner;SharedAccessKey=xxxx
+        location: us-west-2
+        tags:
+          extender: iot-hub
+          provider: aws
+
+    GitHubExtenderExample:
+      summary: GitHub integration extender
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/applications/cicd-platform
+          resourceProvisioning: recipe
+          recipe:
+            name: github-integration
+            parameters:
+              appId: '12345'
+              installationId: '67890'
+          enabledRepositories:
+            - myorg/repo1
+            - myorg/repo2
+          secrets:
+            appPrivateKey: '-----BEGIN RSA PRIVATE KEY-----...'
+        location: westus2
+        tags:
+          extender: github-integration
+          provider: github
+
+    # MongoDB Examples
+    OrdersMongoDatabaseExample:
+      summary: Orders MongoDB database using recipe
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resourceProvisioning: recipe
+          recipe:
+            name: default
+            parameters:
+              databaseName: orders
+              throughput: 4000
+        location: eastus
+        tags:
+          datastore: mongodb
+          purpose: orders
+
+    TimeseriesMongoDatabaseExample:
+      summary: Time series MongoDB for IoT data
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/applications/iot-data-platform
+          resourceProvisioning: recipe
+          recipe:
+            name: timeseries
+            parameters:
+              databaseName: iot_timeseries
+              collectionName: device_readings
+              shardKey: deviceId
+              timeField: timestamp
+        location: us-west-2
+        tags:
+          datastore: mongodb-timeseries
+
+    MongoDatabaseListExample:
+      summary: List of MongoDB databases
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: recipe
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Datastores/mongoDatabases/orders-db
+            name: orders-db
+            type: Applications.Datastores/mongoDatabases
+
+    MongoDatabaseListSecretsExample:
+      summary: MongoDB secrets
+      value:
+        password: supersecretpassword
+        connectionString: mongodb://user:password@host:27017/orders
+
+    # Redis Examples
+    SessionCacheExample:
+      summary: Session cache Redis (manual provisioning)
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resourceProvisioning: manual
+          host: ecommerce-redis.redis.cache.windows.net
+          port: 6380
+          tls: true
+          username: default
+          secrets:
+            connectionString: ecommerce-redis.redis.cache.windows.net:6380,password=xxxx,ssl=True,abortConnect=False
+            password: supersecretpassword
+          resources:
+            - id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ecommerce-rg/providers/Microsoft.Cache/redis/ecommerce-redis
+        location: eastus
+        tags:
+          datastore: redis
+          purpose: session-cache
+
+    StreamCacheExample:
+      summary: Stream cache Redis cluster
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/applications/iot-data-platform
+          resourceProvisioning: recipe
+          recipe:
+            name: stream-cache
+            parameters:
+              clusterMode: enabled
+              numShards: 2
+              replicasPerShard: 2
+        location: us-west-2
+        tags:
+          datastore: redis-cluster
+
+    BuildCacheExample:
+      summary: Build cache Redis for CI/CD
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/applications/cicd-platform
+          resourceProvisioning: recipe
+          recipe:
+            name: premium
+            parameters:
+              enableNonSslPort: false
+              minimumTlsVersion: '1.2'
+        location: westus2
+        tags:
+          datastore: redis
+          purpose: build-cache
+
+    RedisCacheListExample:
+      summary: List of Redis caches
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: manual
+              host: ecommerce-redis.redis.cache.windows.net
+              port: 6380
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Datastores/redisCaches/session-cache
+            name: session-cache
+            type: Applications.Datastores/redisCaches
+
+    RedisCacheListSecretsExample:
+      summary: Redis secrets
+      value:
+        connectionString: ecommerce-redis.redis.cache.windows.net:6380,password=xxxx
+        password: supersecretpassword
+        url: redis://default:password@ecommerce-redis.redis.cache.windows.net:6380
+
+    # SQL Examples
+    BuildMetadataSqlDatabaseExample:
+      summary: Build metadata SQL database
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/applications/cicd-platform
+          resourceProvisioning: recipe
+          recipe:
+            name: default
+            parameters:
+              databaseName: build_metadata
+              collation: SQL_Latin1_General_CP1_CI_AS
+        location: westus2
+        tags:
+          datastore: sql-database
+          purpose: build-metadata
+
+    SqlDatabaseListExample:
+      summary: List of SQL databases
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: recipe
+              provisioningState: Succeeded
+            location: westus2
+            id: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Datastores/sqlDatabases/build-metadata
+            name: build-metadata
+            type: Applications.Datastores/sqlDatabases
+
+    SqlDatabaseListSecretsExample:
+      summary: SQL database secrets
+      value:
+        password: supersecretpassword
+        connectionString: Server=server.database.windows.net;Database=build_metadata;User Id=admin;Password=xxxx
+
+    # RabbitMQ Examples
+    OrderEventsQueueExample:
+      summary: Order events RabbitMQ queue
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resourceProvisioning: recipe
+          recipe:
+            name: default
+            parameters:
+              queueName: order-events
+              durable: true
+        location: eastus
+        tags:
+          messaging: rabbitmq
+          purpose: order-events
+
+    AlertNotificationsQueueExample:
+      summary: Alert notifications RabbitMQ queue (manual)
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/applications/iot-data-platform
+          resourceProvisioning: manual
+          host: iot-rabbitmq.us-west-2.amazonaws.com
+          port: 5671
+          queue: alert-notifications
+          vHost: iot
+          tls: true
+          username: iot-alerts-user
+          secrets:
+            password: rabbitmq-secret-password
+            uri: amqps://iot-alerts-user:password@iot-rabbitmq.us-west-2.amazonaws.com:5671/iot
+          resources:
+            - id: arn:aws:mq:us-west-2:123456789012:broker:iot-rabbitmq:b-xxxx
+        location: us-west-2
+        tags:
+          messaging: rabbitmq
+          queue: alert-notifications
+
+    ArtifactEventsQueueExample:
+      summary: Artifact events queue for CI/CD
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/applications/cicd-platform
+          resourceProvisioning: manual
+          host: cicd-messaging.servicebus.windows.net
+          port: 5671
+          queue: artifact-events
+          vHost: /
+          tls: true
+          username: artifact-publisher
+          secrets:
+            password: servicebus-secret
+            uri: amqps://artifact-publisher:password@cicd-messaging.servicebus.windows.net:5671/
+          resources:
+            - id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/cicd-rg/providers/Microsoft.ServiceBus/namespaces/cicd-messaging
+        location: westus2
+        tags:
+          messaging: servicebus
+          queue: artifact-events
+
+    RabbitMQQueueListExample:
+      summary: List of RabbitMQ queues
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: recipe
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Messaging/rabbitMQQueues/order-events
+            name: order-events
+            type: Applications.Messaging/rabbitMQQueues
+
+    RabbitMQListSecretsExample:
+      summary: RabbitMQ secrets
+      value:
+        password: supersecretpassword
+        uri: amqps://user:password@host:5671/vhost
+
+    # Dapr State Store Examples
+    RedisStateStoreExample:
+      summary: Redis state store for e-commerce
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resourceProvisioning: manual
+          type: state.redis
+          version: v1
+          metadata:
+            redisHost:
+              value: ecommerce-redis.redis.cache.windows.net:6380
+            redisPassword:
+              secretKeyRef:
+                name: redis-password
+                key: password
+            enableTLS:
+              value: 'true'
+            actorStateStore:
+              value: 'true'
+          auth:
+            secretStore: order-secrets
+          resources:
+            - id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ecommerce-rg/providers/Microsoft.Cache/redis/ecommerce-redis
+        location: eastus
+        tags:
+          dapr-component: state-store
+
+    DynamoDbStateStoreExample:
+      summary: DynamoDB state store for IoT
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/applications/iot-data-platform
+          resourceProvisioning: manual
+          type: state.aws.dynamodb
+          version: v1
+          metadata:
+            table:
+              value: iot-device-state
+            region:
+              value: us-west-2
+            partitionKey:
+              value: deviceId
+        location: us-west-2
+
+    TableStorageStateStoreExample:
+      summary: Azure Table Storage state store for CI/CD
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/applications/cicd-platform
+          resourceProvisioning: manual
+          type: state.azure.tablestorage
+          version: v1
+          metadata:
+            accountName:
+              value: cicdstatestore
+            tableName:
+              value: buildstate
+            accountKey:
+              secretKeyRef:
+                name: storage-key
+                key: accountKey
+          auth:
+            secretStore: build-secrets
+        location: westus2
+
+    DaprStateStoreListExample:
+      summary: List of Dapr state stores
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: manual
+              type: state.redis
+              componentName: ecommerce-state
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Dapr/stateStores/ecommerce-state
+            name: ecommerce-state
+            type: Applications.Dapr/stateStores
+
+    # Dapr Pub/Sub Examples
+    RabbitMQPubSubExample:
+      summary: RabbitMQ pub/sub for e-commerce
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resourceProvisioning: manual
+          type: pubsub.rabbitmq
+          version: v1
+          metadata:
+            host:
+              value: amqps://ecommerce-rabbitmq.servicebus.windows.net:5671
+            durable:
+              value: 'true'
+            deletedWhenUnused:
+              value: 'false'
+            autoAck:
+              value: 'false'
+          resources:
+            - id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Messaging/rabbitMQQueues/order-events
+        location: eastus
+        tags:
+          dapr-component: pubsub
+
+    SnsSqsPubSubExample:
+      summary: AWS SNS/SQS pub/sub for IoT
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/iot-rg/providers/Applications.Core/applications/iot-data-platform
+          resourceProvisioning: manual
+          type: pubsub.aws.snssqs
+          version: v1
+          metadata:
+            region:
+              value: us-west-2
+            messageVisibilityTimeout:
+              value: '60'
+            messageRetryLimit:
+              value: '3'
+        location: us-west-2
+
+    ServiceBusPubSubExample:
+      summary: Azure Service Bus pub/sub for CI/CD
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/cicd-rg/providers/Applications.Core/applications/cicd-platform
+          resourceProvisioning: manual
+          type: pubsub.azure.servicebus
+          version: v1
+          metadata:
+            connectionString:
+              secretKeyRef:
+                name: servicebus-connection
+                key: connectionString
+            maxActiveMessages:
+              value: '100'
+            maxConcurrentHandlers:
+              value: '10'
+          auth:
+            secretStore: build-secrets
+        location: westus2
+
+    DaprPubSubBrokerListExample:
+      summary: List of Dapr pub/sub brokers
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: manual
+              type: pubsub.rabbitmq
+              componentName: ecommerce-pubsub
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Dapr/pubSubBrokers/ecommerce-pubsub
+            name: ecommerce-pubsub
+            type: Applications.Dapr/pubSubBrokers
+
+    # Dapr Secret Store Examples
+    KeyVaultSecretStoreExample:
+      summary: Azure Key Vault secret store
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resourceProvisioning: manual
+          type: secretstores.azure.keyvault
+          version: v1
+          metadata:
+            vaultName:
+              value: ecommerce-secrets-kv
+            azureClientId:
+              value: 00000000-0000-0000-0000-000000000000
+        location: eastus
+        tags:
+          dapr-component: secret-store
+
+    DaprSecretStoreListExample:
+      summary: List of Dapr secret stores
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: manual
+              type: secretstores.azure.keyvault
+              componentName: keyvault-secrets
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Dapr/secretStores/keyvault-secrets
+            name: keyvault-secrets
+            type: Applications.Dapr/secretStores
+
+    # Dapr Configuration Store Examples
+    AppConfigConfigurationStoreExample:
+      summary: Azure App Configuration store
+      value:
+        properties:
+          environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+          application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+          resourceProvisioning: manual
+          type: configuration.azure.appconfig
+          version: v1
+          metadata:
+            host:
+              value: https://ecommerce-config.azconfig.io
+            maxRetries:
+              value: '3'
+            retryDelay:
+              value: 5s
+          auth:
+            secretStore: order-secrets
+        location: eastus
+        tags:
+          dapr-component: config-store
+
+    DaprConfigurationStoreListExample:
+      summary: List of Dapr configuration stores
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: manual
+              type: configuration.azure.appconfig
+              componentName: ecommerce-config
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Dapr/configurationStores/ecommerce-config
+            name: ecommerce-config
+            type: Applications.Dapr/configurationStores
+
+    # Plane Examples
+    PlaneListExample:
+      summary: List of all planes
+      value:
+        value:
+          - properties: {}
+            location: global
+            id: /planes/radius/local
+            name: local
+            type: System.Radius/planes
+          - properties:
+              url: https://management.azure.com
+            location: global
+            id: /planes/azure/azurecloud
+            name: azurecloud
+            type: System.Azure/planes
+          - properties: {}
+            location: global
+            id: /planes/aws/aws
+            name: aws
+            type: System.AWS/planes
+
+    RadiusPlaneExample:
+      summary: Radius plane with resource providers
+      value:
+        properties:
+          resourceProviders:
+            Applications.Core: http://applications-rp.radius-system:8080
+            Applications.Dapr: http://applications-rp.radius-system:8080
+            Applications.Datastores: http://applications-rp.radius-system:8080
+            Applications.Messaging: http://applications-rp.radius-system:8080
+        location: global
+        tags:
+          plane: radius
+
+    RadiusPlaneListExample:
+      summary: List of Radius planes
+      value:
+        value:
+          - properties:
+              resourceProviders:
+                Applications.Core: http://applications-rp.radius-system:8080
+            location: global
+            id: /planes/radius/local
+            name: local
+            type: System.Radius/planes
+
+    AzurePlaneExample:
+      summary: Azure plane
+      value:
+        properties:
+          url: https://management.azure.com
+        location: global
+        tags:
+          plane: azure
+
+    AzurePlaneListExample:
+      summary: List of Azure planes
+      value:
+        value:
+          - properties:
+              url: https://management.azure.com
+            location: global
+            id: /planes/azure/azurecloud
+            name: azurecloud
+            type: System.Azure/planes
+
+    AwsPlaneExample:
+      summary: AWS plane
+      value:
+        properties: {}
+        location: global
+        tags:
+          plane: aws
+
+    AwsPlaneListExample:
+      summary: List of AWS planes
+      value:
+        value:
+          - properties: {}
+            location: global
+            id: /planes/aws/aws
+            name: aws
+            type: System.AWS/planes
+
+    # Resource Group Examples
+    ResourceGroupExample:
+      summary: Resource group
+      value:
+        properties: {}
+        location: westus2
+        tags:
+          resource-group: cicd-rg
+          environment: production
+
+    ResourceGroupListExample:
+      summary: List of resource groups
+      value:
+        value:
+          - properties: {}
+            location: eastus
+            tags:
+              environment: production
+            id: /planes/radius/local/resourceGroups/ecommerce-rg
+            name: ecommerce-rg
+            type: System.Resources/resourceGroups
+          - properties: {}
+            location: us-west-2
+            tags:
+              platform: iot
+            id: /planes/radius/local/resourceGroups/iot-rg
+            name: iot-rg
+            type: System.Resources/resourceGroups
+
+    # Credential Examples
+    AzureWorkloadIdentityCredentialExample:
+      summary: Azure Workload Identity credential
+      value:
+        properties:
+          kind: WorkloadIdentity
+          clientId: 00000000-0000-0000-0000-000000000000
+          tenantId: 00000000-0000-0000-0000-000000000000
+          storage:
+            kind: Internal
+            secretName: azure-workload-identity
+        location: westus2
+        tags:
+          credential: azure-workload-identity
+
+    AzureServicePrincipalCredentialExample:
+      summary: Azure Service Principal credential
+      value:
+        properties:
+          kind: ServicePrincipal
+          clientId: 00000000-0000-0000-0000-000000000000
+          clientSecret: '***'
+          tenantId: 00000000-0000-0000-0000-000000000000
+          storage:
+            kind: Internal
+            secretName: azure-sp-credentials
+        location: eastus
+        tags:
+          credential: azure-service-principal
+
+    AzureCredentialListExample:
+      summary: List of Azure credentials
+      value:
+        value:
+          - properties:
+              kind: WorkloadIdentity
+              clientId: 00000000-0000-0000-0000-000000000000
+              tenantId: 00000000-0000-0000-0000-000000000000
+            location: westus2
+            id: /planes/azure/azurecloud/providers/System.Azure/credentials/default
+            name: default
+            type: System.Azure/credentials
+
+    AwsIrsaCredentialExample:
+      summary: AWS IRSA credential
+      value:
+        properties:
+          kind: IRSA
+          roleARN: arn:aws:iam::123456789012:role/cicd-cross-account-role
+          storage:
+            kind: Internal
+            secretName: aws-irsa-credentials
+        location: us-west-2
+        tags:
+          credential: aws-irsa
+
+    AwsAccessKeyCredentialExample:
+      summary: AWS Access Key credential
+      value:
+        properties:
+          kind: AccessKey
+          accessKeyId: AKIAIOSFODNN7EXAMPLE
+          secretAccessKey: '***'
+          storage:
+            kind: Internal
+            secretName: aws-access-key-credentials
+        location: us-east-1
+        tags:
+          credential: aws-access-key
+
+    AwsCredentialListExample:
+      summary: List of AWS credentials
+      value:
+        value:
+          - properties:
+              kind: IRSA
+              roleARN: arn:aws:iam::123456789012:role/radius-role
+            location: us-west-2
+            id: /planes/aws/aws/providers/System.AWS/credentials/default
+            name: default
+            type: System.AWS/credentials
+
+    # Additional List Examples
+    SecretStoreListExample:
+      summary: List of secret stores
+      value:
+        value:
+          - properties:
+              type: generic
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/secretStores/db-secrets
+            name: db-secrets
+            type: Applications.Core/secretStores
+
+    VolumeListExample:
+      summary: List of volumes
+      value:
+        value:
+          - properties:
+              kind: azure.com.keyvault
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/volumes/order-config
+            name: order-config
+            type: Applications.Core/volumes
+
+    ExtenderListExample:
+      summary: List of extenders
+      value:
+        value:
+          - properties:
+              environment: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/environments/prod
+              resourceProvisioning: recipe
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/extenders/payment-gateway
+            name: payment-gateway
+            type: Applications.Core/extenders
+
+    ExtenderListSecretsExample:
+      summary: Extender secrets
+      value:
+        apiKey: sk_live_xxxxx
+        webhookSecret: whsec_xxxxx
+
+    SecretStoreListSecretsExample:
+      summary: Secret store secrets
+      value:
+        type: generic
+        data:
+          username:
+            encoding: raw
+            value: admin
+          password:
+            encoding: raw
+            value: '***'
+
+    GatewayListExample:
+      summary: List of gateways
+      value:
+        value:
+          - properties:
+              application: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/applications/ecommerce-platform
+              routes: []
+              provisioningState: Succeeded
+            location: eastus
+            id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/gateways/api-gateway
+            name: api-gateway
+            type: Applications.Core/gateways
+
+    ApplicationGraphExample:
+      summary: Application graph response
+      value:
+        resources:
+          - id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Core/containers/orderService
+            type: Applications.Core/containers
+            name: orderService
+            provisioningState: Succeeded
+            outputResources:
+              - id: /planes/kubernetes/local/namespaces/ecommerce-app/Deployment/order-service
+                type: kubernetes/Deployment
+                name: order-service
+            connections:
+              - id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Datastores/mongoDatabases/orders-db
+                direction: Outbound
+          - id: /planes/radius/local/resourceGroups/ecommerce-rg/providers/Applications.Datastores/mongoDatabases/orders-db
+            type: Applications.Datastores/mongoDatabases
+            name: orders-db
+            provisioningState: Succeeded
+            outputResources: []
+            connections: []
+
+    RecipeGetMetadataRequestExample:
+      summary: Recipe metadata request
+      value:
+        resourceType: Applications.Datastores/redisCaches
+        name: default
+
+    RecipeGetMetadataResponseExample:
+      summary: Recipe metadata response
+      value:
+        templateKind: bicep
+        templatePath: ghcr.io/myorg/recipes/redis:1.0.0
+        parameters:
+          sku:
+            type: string
+            defaultValue: Standard
+          capacity:
+            type: int
+            defaultValue: 1
+        plainHttp: false
+
+    ResourceProviderListExample:
+      summary: List of resource providers
+      value:
+        value:
+          - name: Applications.Core
+            locations:
+              global: {}
+            resourceTypes:
+              applications:
+                apiVersions:
+                  '2023-10-01-preview': {}
+                defaultApiVersion: '2023-10-01-preview'
+              containers:
+                apiVersions:
+                  '2023-10-01-preview': {}
+                defaultApiVersion: '2023-10-01-preview'
+
+    ResourceProviderExample:
+      summary: Resource provider
+      value:
+        properties: {}
+        id: /planes/radius/local/providers/Applications.Core
+        name: Applications.Core
+        type: System.Resources/resourceProviders

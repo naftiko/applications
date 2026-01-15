@@ -1,0 +1,2241 @@
+openapi: 3.1.0
+info:
+  title: Open Component Model API
+  version: 1.0.0
+  description: |
+    API for managing Open Component Model (OCM) component descriptors and configurations.
+    
+    The Open Component Model provides a standard for describing software components,
+    their resources, sources, and dependencies in a technology-agnostic way.
+  contact:
+    name: OCM Project
+    url: https://ocm.software
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: https://api.ocm.example.com/v1
+    description: Production server
+  - url: https://staging.ocm.example.com/v1
+    description: Staging server
+
+tags:
+  - name: Components
+    description: Operations for managing component descriptors
+  - name: Configurations
+    description: Operations for managing component configurations
+  - name: Resources
+    description: Operations for managing component resources
+  - name: Sources
+    description: Operations for managing component sources
+  - name: Signatures
+    description: Operations for component signing and verification
+
+paths:
+  /components:
+    get:
+      tags:
+        - Components
+      summary: List component descriptors
+      operationId: listComponents
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+        - $ref: '#/components/parameters/ProviderFilterParam'
+      responses:
+        '200':
+          description: List of component descriptors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentDescriptorListResponse'
+              examples:
+                componentList:
+                  $ref: '#/components/examples/ComponentDescriptorListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Components
+      summary: Create a component descriptor
+      operationId: createComponent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComponentDescriptor'
+            examples:
+              webApplication:
+                $ref: '#/components/examples/WebApplicationComponentDescriptor'
+      responses:
+        '201':
+          description: Component descriptor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentDescriptor'
+              examples:
+                webApplication:
+                  $ref: '#/components/examples/WebApplicationComponentDescriptor'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /components/{name}:
+    parameters:
+      - $ref: '#/components/parameters/ComponentNameParam'
+
+    get:
+      tags:
+        - Components
+      summary: Get a component descriptor by name
+      operationId: getComponent
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '200':
+          description: Component descriptor details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentDescriptor'
+              examples:
+                webApplication:
+                  $ref: '#/components/examples/WebApplicationComponentDescriptor'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      tags:
+        - Components
+      summary: Update a component descriptor
+      operationId: updateComponent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComponentDescriptor'
+            examples:
+              webApplication:
+                $ref: '#/components/examples/WebApplicationComponentDescriptor'
+      responses:
+        '200':
+          description: Component descriptor updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentDescriptor'
+              examples:
+                webApplication:
+                  $ref: '#/components/examples/WebApplicationComponentDescriptor'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - Components
+      summary: Delete a component descriptor
+      operationId: deleteComponent
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '204':
+          description: Component deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /components/{name}/versions:
+    parameters:
+      - $ref: '#/components/parameters/ComponentNameParam'
+
+    get:
+      tags:
+        - Components
+      summary: List all versions of a component
+      operationId: listComponentVersions
+      responses:
+        '200':
+          description: List of component versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionListResponse'
+              examples:
+                versionList:
+                  $ref: '#/components/examples/VersionListResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /components/{name}/resources:
+    parameters:
+      - $ref: '#/components/parameters/ComponentNameParam'
+
+    get:
+      tags:
+        - Resources
+      summary: List resources for a component
+      operationId: listComponentResources
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '200':
+          description: List of component resources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceListResponse'
+              examples:
+                resourceList:
+                  $ref: '#/components/examples/ResourceListResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Resources
+      summary: Add a resource to a component
+      operationId: addComponentResource
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resource'
+            examples:
+              ociImage:
+                $ref: '#/components/examples/OciImageResource'
+              helmChart:
+                $ref: '#/components/examples/HelmChartResource'
+      responses:
+        '201':
+          description: Resource added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+              examples:
+                ociImage:
+                  $ref: '#/components/examples/OciImageResource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /components/{name}/resources/{resourceName}:
+    parameters:
+      - $ref: '#/components/parameters/ComponentNameParam'
+      - $ref: '#/components/parameters/ResourceNameParam'
+
+    get:
+      tags:
+        - Resources
+      summary: Get a specific resource
+      operationId: getComponentResource
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '200':
+          description: Resource details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+              examples:
+                ociImage:
+                  $ref: '#/components/examples/OciImageResource'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - Resources
+      summary: Remove a resource from a component
+      operationId: deleteComponentResource
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '204':
+          description: Resource removed
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /components/{name}/sources:
+    parameters:
+      - $ref: '#/components/parameters/ComponentNameParam'
+
+    get:
+      tags:
+        - Sources
+      summary: List sources for a component
+      operationId: listComponentSources
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '200':
+          description: List of component sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourceListResponse'
+              examples:
+                sourceList:
+                  $ref: '#/components/examples/SourceListResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Sources
+      summary: Add a source to a component
+      operationId: addComponentSource
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Source'
+            examples:
+              gitSource:
+                $ref: '#/components/examples/GitHubSource'
+      responses:
+        '201':
+          description: Source added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+              examples:
+                gitSource:
+                  $ref: '#/components/examples/GitHubSource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /components/{name}/references:
+    parameters:
+      - $ref: '#/components/parameters/ComponentNameParam'
+
+    get:
+      tags:
+        - Components
+      summary: List component references
+      operationId: listComponentReferences
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '200':
+          description: List of component references
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentReferenceListResponse'
+              examples:
+                referenceList:
+                  $ref: '#/components/examples/ComponentReferenceListResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Components
+      summary: Add a component reference
+      operationId: addComponentReference
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComponentReference'
+            examples:
+              databaseRef:
+                $ref: '#/components/examples/ComponentReferenceDatabase'
+      responses:
+        '201':
+          description: Reference added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentReference'
+              examples:
+                databaseRef:
+                  $ref: '#/components/examples/ComponentReferenceDatabase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /components/{name}/signatures:
+    parameters:
+      - $ref: '#/components/parameters/ComponentNameParam'
+
+    get:
+      tags:
+        - Signatures
+      summary: List signatures for a component
+      operationId: listComponentSignatures
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      responses:
+        '200':
+          description: List of signatures
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignatureListResponse'
+              examples:
+                signatureList:
+                  $ref: '#/components/examples/SignatureListResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Signatures
+      summary: Sign a component
+      operationId: signComponent
+      parameters:
+        - $ref: '#/components/parameters/VersionQueryParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignatureRequest'
+            examples:
+              rsaSignature:
+                $ref: '#/components/examples/SignatureRequest'
+      responses:
+        '201':
+          description: Component signed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signature'
+              examples:
+                signature:
+                  $ref: '#/components/examples/Signature'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /components/{name}/signatures/{signatureName}/verify:
+    post:
+      tags:
+        - Signatures
+      summary: Verify a component signature
+      operationId: verifyComponentSignature
+      parameters:
+        - $ref: '#/components/parameters/ComponentNameParam'
+        - $ref: '#/components/parameters/SignatureNameParam'
+        - $ref: '#/components/parameters/VersionQueryParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+            examples:
+              verifyRequest:
+                $ref: '#/components/examples/VerificationRequest'
+      responses:
+        '200':
+          description: Verification result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResult'
+              examples:
+                verified:
+                  $ref: '#/components/examples/VerificationResultSuccess'
+                failed:
+                  $ref: '#/components/examples/VerificationResultFailed'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /configurations:
+    get:
+      tags:
+        - Configurations
+      summary: List component configurations
+      operationId: listConfigurations
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: List of configurations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationListResponse'
+              examples:
+                configList:
+                  $ref: '#/components/examples/ConfigurationListResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - Configurations
+      summary: Create a component configuration
+      operationId: createConfiguration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComponentConfiguration'
+            examples:
+              mlPipeline:
+                $ref: '#/components/examples/MLPipelineConfiguration'
+              microservices:
+                $ref: '#/components/examples/MicroservicesConfiguration'
+      responses:
+        '201':
+          description: Configuration created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentConfiguration'
+              examples:
+                mlPipeline:
+                  $ref: '#/components/examples/MLPipelineConfiguration'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /configurations/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ConfigurationIdParam'
+
+    get:
+      tags:
+        - Configurations
+      summary: Get a configuration by ID
+      operationId: getConfiguration
+      responses:
+        '200':
+          description: Configuration details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentConfiguration'
+              examples:
+                mlPipeline:
+                  $ref: '#/components/examples/MLPipelineConfiguration'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - Configurations
+      summary: Delete a configuration
+      operationId: deleteConfiguration
+      responses:
+        '204':
+          description: Configuration deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /transfer:
+    post:
+      tags:
+        - Components
+      summary: Transfer components between repositories
+      operationId: transferComponents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+            examples:
+              transfer:
+                $ref: '#/components/examples/TransferRequest'
+      responses:
+        '202':
+          description: Transfer initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResult'
+              examples:
+                transferResult:
+                  $ref: '#/components/examples/TransferResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  parameters:
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+    OffsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+
+    ComponentNameParam:
+      name: name
+      in: path
+      required: true
+      description: Component name (e.g., github.com/acme.org/web-application)
+      schema:
+        $ref: '#/components/schemas/ComponentName'
+
+    VersionQueryParam:
+      name: version
+      in: query
+      description: Component version (semver)
+      schema:
+        $ref: '#/components/schemas/Version'
+
+    ResourceNameParam:
+      name: resourceName
+      in: path
+      required: true
+      description: Resource element name
+      schema:
+        $ref: '#/components/schemas/ElementName'
+
+    SignatureNameParam:
+      name: signatureName
+      in: path
+      required: true
+      description: Signature name
+      schema:
+        type: string
+
+    ProviderFilterParam:
+      name: provider
+      in: query
+      description: Filter by provider name
+      schema:
+        type: string
+
+    ConfigurationIdParam:
+      name: id
+      in: path
+      required: true
+      description: Configuration ID
+      schema:
+        type: string
+
+  schemas:
+    # List Response Wrappers
+    ComponentDescriptorListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentDescriptor'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    VersionListResponse:
+      type: object
+      properties:
+        componentName:
+          $ref: '#/components/schemas/ComponentName'
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
+
+    ResourceListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Resource'
+
+    SourceListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Source'
+
+    ComponentReferenceListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/ComponentReference'
+
+    SignatureListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Signature'
+
+    ConfigurationListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentConfiguration'
+        total:
+          type: integer
+
+    # Core OCM Schemas
+    Meta:
+      type: object
+      description: Component descriptor metadata
+      required:
+        - schemaVersion
+      properties:
+        schemaVersion:
+          type: string
+          description: Schema version identifier
+          examples:
+            - v2
+
+    ComponentName:
+      type: string
+      description: Fully qualified component name
+      maxLength: 255
+      pattern: ^[a-z][-a-z0-9]*([.][a-z][-a-z0-9]*)*[.][a-z]{2,}(/[a-z][-a-z0-9_]*([.][a-z][-a-z0-9_]*)*)+$
+      examples:
+        - github.com/acme.org/web-application
+        - github.com/ailab.org/model-training-pipeline
+
+    ElementName:
+      type: string
+      description: Element name for resources and sources
+      minLength: 2
+      pattern: ^[a-z0-9]([-_+a-z0-9]*[a-z0-9])?$
+      examples:
+        - frontend-image
+        - backend-image
+        - helm-chart
+
+    Version:
+      type: string
+      description: Semantic version string
+      pattern: ^[v]?(0|[1-9]\d*)(?:\.(0|[1-9]\d*))?(?:\.(0|[1-9]\d*))?(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+      examples:
+        - 1.0.0
+        - 2.5.1
+        - v1.0.0-beta.1
+
+    Label:
+      type: object
+      description: A label with name-value pair
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          description: Label name
+        value: {}
+        version:
+          type: string
+          pattern: ^v[0-9]+$
+        signing:
+          type: boolean
+          description: Whether this label should be included in signing
+        merge:
+          $ref: '#/components/schemas/Merge'
+
+    Labels:
+      type: array
+      items:
+        $ref: '#/components/schemas/Label'
+
+    Merge:
+      type: object
+      properties:
+        algorithm:
+          type: string
+          pattern: ^[a-z][a-z0-9/_-]+$
+        config: {}
+
+    Provider:
+      type: object
+      description: Component provider information
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Provider name
+          examples:
+            - acme
+            - ailab
+            - enterprise
+        labels:
+          $ref: '#/components/schemas/Labels'
+
+    RepositoryContext:
+      type: object
+      description: Repository context for component storage
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - ociRegistry
+            - OCIRegistry
+        baseUrl:
+          type: string
+          description: Base URL of the repository
+        componentNameMapping:
+          type: string
+          enum:
+            - urlPath
+            - sha256-digest
+
+    IdentityAttribute:
+      type: object
+      description: Identity attributes for element identification
+      additionalProperties:
+        type: string
+
+    DigestSpec:
+      type: object
+      description: Cryptographic digest specification
+      required:
+        - hashAlgorithm
+        - normalisationAlgorithm
+        - value
+      properties:
+        hashAlgorithm:
+          type: string
+          description: Hash algorithm used
+          examples:
+            - SHA-256
+            - SHA-512
+        normalisationAlgorithm:
+          type: string
+          description: Normalisation algorithm used
+          examples:
+            - jsonNormalisation/v1
+            - ociArtifactDigest/v1
+        value:
+          type: string
+          description: The digest value
+
+    SignatureSpec:
+      type: object
+      description: Signature specification
+      required:
+        - algorithm
+        - value
+        - mediaType
+      properties:
+        algorithm:
+          type: string
+          description: Signature algorithm
+          examples:
+            - RSASSA-PSS-SHA256
+            - ECDSA-SHA256
+        value:
+          type: string
+          description: The signature value
+        mediaType:
+          type: string
+          description: Media type of the signature
+          examples:
+            - application/vnd.ocm.signature.rsa
+
+    Signature:
+      type: object
+      description: Component signature
+      required:
+        - name
+        - signature
+      properties:
+        name:
+          type: string
+          description: Signature name/identifier
+        digest:
+          $ref: '#/components/schemas/DigestSpec'
+        signature:
+          $ref: '#/components/schemas/SignatureSpec'
+
+    # Access Types
+    Access:
+      type: object
+      description: Access specification for resources and sources
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: Access type identifier
+      discriminator:
+        propertyName: type
+        mapping:
+          localBlob: '#/components/schemas/LocalBlobAccess'
+          ociArtifact: '#/components/schemas/OciArtifactAccess'
+          ociBlob: '#/components/schemas/OciBlobAccess'
+          helm: '#/components/schemas/HelmAccess'
+          gitHub: '#/components/schemas/GitHubAccess'
+          github: '#/components/schemas/GitHubAccess'
+          s3: '#/components/schemas/S3Access'
+          npm: '#/components/schemas/NpmAccess'
+          wget: '#/components/schemas/WgetAccess'
+          http: '#/components/schemas/HttpAccess'
+
+    LocalBlobAccess:
+      type: object
+      description: Access to a blob stored with the component descriptor
+      required:
+        - type
+        - localReference
+        - mediaType
+      properties:
+        type:
+          const: localBlob
+        localReference:
+          type: string
+          description: Reference to the local blob
+        mediaType:
+          type: string
+          description: Media type of the blob
+        referenceName:
+          type: string
+          description: Reference name for relocation
+        globalAccess:
+          $ref: '#/components/schemas/Access'
+
+    OciArtifactAccess:
+      type: object
+      description: Access to an OCI artifact
+      required:
+        - type
+        - imageReference
+      properties:
+        type:
+          const: ociArtifact
+        imageReference:
+          type: string
+          description: OCI image reference
+
+    OciBlobAccess:
+      type: object
+      description: Access to a specific OCI blob
+      required:
+        - type
+        - imageReference
+        - mediaType
+        - digest
+        - size
+      properties:
+        type:
+          const: ociBlob
+        imageReference:
+          type: string
+        mediaType:
+          type: string
+        digest:
+          type: string
+        size:
+          type: integer
+        ref:
+          type: string
+
+    HelmAccess:
+      type: object
+      description: Access to a Helm chart
+      required:
+        - type
+        - helmRepository
+        - helmChart
+      properties:
+        type:
+          const: helm
+        helmRepository:
+          type: string
+          description: Helm repository URL
+        helmChart:
+          type: string
+          description: Chart name and version
+        caCert:
+          type: string
+        keyring:
+          type: string
+
+    GitHubAccess:
+      type: object
+      description: Access to GitHub repository content
+      required:
+        - type
+        - repoUrl
+      properties:
+        type:
+          type: string
+          enum:
+            - github
+            - gitHub
+        repoUrl:
+          type: string
+          description: Repository URL
+        ref:
+          type: string
+          description: Git reference
+        commit:
+          type: string
+          description: Commit SHA
+
+    S3Access:
+      type: object
+      description: Access to S3 object
+      required:
+        - type
+        - bucket
+        - key
+        - mediaType
+      properties:
+        type:
+          const: s3
+        region:
+          type: string
+        bucket:
+          type: string
+        key:
+          type: string
+        mediaType:
+          type: string
+
+    NpmAccess:
+      type: object
+      description: Access to npm package
+      required:
+        - type
+        - registry
+        - package
+        - version
+      properties:
+        type:
+          const: npm
+        registry:
+          type: string
+        package:
+          type: string
+        version:
+          type: string
+
+    WgetAccess:
+      type: object
+      description: Access via HTTP download
+      required:
+        - type
+        - url
+      properties:
+        type:
+          const: wget
+        url:
+          type: string
+        mediaType:
+          type: string
+        header:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        verb:
+          type: string
+        body:
+          type: string
+        noRedirect:
+          type: boolean
+
+    HttpAccess:
+      type: object
+      description: Generic HTTP access
+      required:
+        - type
+        - url
+      properties:
+        type:
+          const: http
+        url:
+          type: string
+
+    # Input Types
+    Input:
+      type: object
+      description: Input specification for local resources
+      required:
+        - type
+      properties:
+        type:
+          type: string
+
+    DirInput:
+      type: object
+      description: Directory input
+      required:
+        - type
+        - path
+      properties:
+        type:
+          const: dir
+        path:
+          type: string
+        mediaType:
+          type: string
+        compress:
+          type: boolean
+        preserveDir:
+          type: boolean
+        followSymlinks:
+          type: boolean
+        excludeFiles:
+          type: array
+          items:
+            type: string
+        includeFiles:
+          type: array
+          items:
+            type: string
+
+    FileInput:
+      type: object
+      description: File input
+      required:
+        - type
+        - path
+      properties:
+        type:
+          const: file
+        path:
+          type: string
+        mediaType:
+          type: string
+        compress:
+          type: boolean
+
+    DockerInput:
+      type: object
+      description: Docker image input
+      required:
+        - type
+        - path
+      properties:
+        type:
+          const: docker
+        path:
+          type: string
+        repository:
+          type: string
+
+    DockerMultiInput:
+      type: object
+      description: Multi-platform Docker image input
+      required:
+        - type
+        - variants
+      properties:
+        type:
+          const: dockermulti
+        variants:
+          type: array
+          items:
+            type: string
+        repository:
+          type: string
+
+    HelmInput:
+      type: object
+      description: Helm chart input
+      required:
+        - type
+        - path
+      properties:
+        type:
+          const: helm
+        path:
+          type: string
+        version:
+          type: string
+        helmRepository:
+          type: string
+        repository:
+          type: string
+        caCertFile:
+          type: string
+        caCert:
+          type: string
+
+    Utf8Input:
+      type: object
+      description: UTF-8 text input
+      properties:
+        type:
+          const: utf8
+        text:
+          type: string
+        json:
+          type: object
+        formattedJson:
+          type: object
+        yaml:
+          type: object
+        mediaType:
+          type: string
+        compress:
+          type: boolean
+
+    BinaryInput:
+      type: object
+      description: Binary data input
+      required:
+        - type
+        - data
+      properties:
+        type:
+          const: binary
+        data:
+          type: string
+          description: Base64-encoded data
+        mediaType:
+          type: string
+        compress:
+          type: boolean
+
+    SpiffInput:
+      type: object
+      description: Spiff template input
+      required:
+        - type
+        - path
+      properties:
+        type:
+          const: spiff
+        path:
+          type: string
+        mediaType:
+          type: string
+        compress:
+          type: boolean
+        values:
+          type: object
+        libraries:
+          type: array
+          items:
+            type: string
+
+    # Source Reference
+    SrcRef:
+      type: object
+      description: Reference to a component-local source
+      properties:
+        identitySelector:
+          $ref: '#/components/schemas/IdentityAttribute'
+        labels:
+          $ref: '#/components/schemas/Labels'
+
+    # Resource and Source Types
+    Resource:
+      type: object
+      description: Component resource
+      required:
+        - name
+        - type
+      properties:
+        name:
+          $ref: '#/components/schemas/ElementName'
+        type:
+          type: string
+          description: Resource type
+          examples:
+            - ociImage
+            - helmChart
+            - json
+            - directory
+        extraIdentity:
+          $ref: '#/components/schemas/IdentityAttribute'
+        version:
+          $ref: '#/components/schemas/Version'
+        relation:
+          type: string
+          enum:
+            - local
+            - external
+          default: external
+        labels:
+          $ref: '#/components/schemas/Labels'
+        srcRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SrcRef'
+        access:
+          $ref: '#/components/schemas/Access'
+        input:
+          $ref: '#/components/schemas/Input'
+        digest:
+          oneOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/DigestSpec'
+
+    Source:
+      type: object
+      description: Component source
+      required:
+        - name
+        - type
+      properties:
+        name:
+          $ref: '#/components/schemas/ElementName'
+        type:
+          type: string
+          description: Source type
+          examples:
+            - git
+            - helmChart
+            - yaml
+        extraIdentity:
+          $ref: '#/components/schemas/IdentityAttribute'
+        version:
+          $ref: '#/components/schemas/Version'
+        labels:
+          $ref: '#/components/schemas/Labels'
+        access:
+          $ref: '#/components/schemas/Access'
+        input:
+          $ref: '#/components/schemas/Input'
+
+    ComponentReference:
+      type: object
+      description: Reference to another component
+      required:
+        - name
+        - componentName
+        - version
+      properties:
+        name:
+          $ref: '#/components/schemas/ElementName'
+        componentName:
+          $ref: '#/components/schemas/ComponentName'
+        version:
+          $ref: '#/components/schemas/Version'
+        extraIdentity:
+          $ref: '#/components/schemas/IdentityAttribute'
+        labels:
+          $ref: '#/components/schemas/Labels'
+        digest:
+          oneOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/DigestSpec'
+
+    Component:
+      type: object
+      description: Component definition
+      required:
+        - name
+        - version
+        - provider
+      properties:
+        name:
+          $ref: '#/components/schemas/ComponentName'
+        version:
+          $ref: '#/components/schemas/Version'
+        creationTime:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        repositoryContexts:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositoryContext'
+        provider:
+          oneOf:
+            - type: string
+            - $ref: '#/components/schemas/Provider'
+        labels:
+          $ref: '#/components/schemas/Labels'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Source'
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+        componentReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentReference'
+
+    ComponentDescriptor:
+      type: object
+      description: Complete component descriptor
+      required:
+        - meta
+        - component
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        component:
+          $ref: '#/components/schemas/Component'
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Signature'
+        nestedDigests:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedComponentDigests'
+
+    NestedComponentDigests:
+      type: object
+      description: Digests for nested components
+      required:
+        - name
+        - version
+      properties:
+        name:
+          $ref: '#/components/schemas/ComponentName'
+        version:
+          $ref: '#/components/schemas/Version'
+        digest:
+          $ref: '#/components/schemas/DigestSpec'
+        resourceDigests:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedDigestSpec'
+
+    NestedDigestSpec:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        extraIdentity:
+          $ref: '#/components/schemas/IdentityAttribute'
+        digest:
+          $ref: '#/components/schemas/DigestSpec'
+
+    ComponentConfiguration:
+      type: object
+      description: Configuration for multiple components
+      required:
+        - components
+      properties:
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/Component'
+
+    # Request/Response Types
+    SignatureRequest:
+      type: object
+      description: Request to sign a component
+      required:
+        - name
+        - algorithm
+      properties:
+        name:
+          type: string
+          description: Signature name
+        algorithm:
+          type: string
+          description: Signing algorithm
+          examples:
+            - RSASSA-PSS-SHA256
+            - ECDSA-SHA256
+        privateKey:
+          type: string
+          description: Private key (PEM encoded)
+        certificate:
+          type: string
+          description: Certificate chain (PEM encoded)
+
+    VerificationRequest:
+      type: object
+      description: Request to verify a signature
+      required:
+        - publicKey
+      properties:
+        publicKey:
+          type: string
+          description: Public key (PEM encoded)
+        certificate:
+          type: string
+          description: Certificate for verification
+
+    VerificationResult:
+      type: object
+      description: Signature verification result
+      required:
+        - verified
+      properties:
+        verified:
+          type: boolean
+          description: Whether verification succeeded
+        message:
+          type: string
+          description: Verification message or error
+        signatureName:
+          type: string
+        componentName:
+          $ref: '#/components/schemas/ComponentName'
+        version:
+          $ref: '#/components/schemas/Version'
+
+    TransferRequest:
+      type: object
+      description: Request to transfer components
+      required:
+        - components
+        - targetRepository
+      properties:
+        components:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                $ref: '#/components/schemas/ComponentName'
+              version:
+                $ref: '#/components/schemas/Version'
+        sourceRepository:
+          $ref: '#/components/schemas/RepositoryContext'
+        targetRepository:
+          $ref: '#/components/schemas/RepositoryContext'
+        recursive:
+          type: boolean
+          default: true
+          description: Transfer referenced components
+
+    TransferResult:
+      type: object
+      description: Result of transfer operation
+      properties:
+        status:
+          type: string
+          enum:
+            - pending
+            - running
+            - completed
+            - failed
+        transferId:
+          type: string
+        componentsTransferred:
+          type: integer
+        message:
+          type: string
+
+    Error:
+      type: object
+      description: Error response
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            badRequest:
+              $ref: '#/components/examples/ErrorBadRequest'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            notFound:
+              $ref: '#/components/examples/ErrorNotFound'
+
+    Conflict:
+      description: Resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            conflict:
+              $ref: '#/components/examples/ErrorConflict'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            internalError:
+              $ref: '#/components/examples/ErrorInternal'
+
+  examples:
+    # Component Descriptor Examples
+    WebApplicationComponentDescriptor:
+      summary: Web Application Component Descriptor
+      description: Complete component descriptor for a web application
+      value:
+        meta:
+          schemaVersion: v2
+        component:
+          name: github.com/acme.org/web-application
+          version: 2.5.1
+          creationTime: '2025-01-13T10:30:00Z'
+          provider:
+            name: acme
+            labels:
+              - name: team
+                value: platform-engineering
+          repositoryContexts:
+            - type: ociRegistry
+              baseUrl: ghcr.io/acme
+              componentNameMapping: urlPath
+          labels:
+            - name: app.kubernetes.io/name
+              value: web-application
+            - name: environment
+              value: production
+              signing: true
+          sources:
+            - name: application-source
+              type: git
+              version: 2.5.1
+              access:
+                type: gitHub
+                repoUrl: https://github.com/acme-org/web-application
+                commit: a7f8d9e1c2b3a4f5e6d7c8b9a0f1e2d3c4b5a6f7
+              labels:
+                - name: language
+                  value: javascript
+            - name: deployment-manifests
+              type: helmChart
+              version: 1.2.0
+              access:
+                type: helm
+                helmRepository: https://charts.acme.org
+                helmChart: web-app:1.2.0
+          resources:
+            - name: frontend-image
+              type: ociImage
+              version: 2.5.1
+              relation: local
+              access:
+                type: ociArtifact
+                imageReference: ghcr.io/acme-org/web-app-frontend:2.5.1@sha256:4f5d0d0684a1ed9f7ce482c87c2c4d3499468fdcea2711f0c3f6a69a7aa9147b
+              labels:
+                - name: component
+                  value: frontend
+              digest:
+                hashAlgorithm: SHA-256
+                normalisationAlgorithm: ociArtifactDigest/v1
+                value: 4f5d0d0684a1ed9f7ce482c87c2c4d3499468fdcea2711f0c3f6a69a7aa9147b
+            - name: backend-image
+              type: ociImage
+              version: 2.5.1
+              relation: local
+              access:
+                type: ociArtifact
+                imageReference: ghcr.io/acme-org/web-app-backend:2.5.1
+              srcRefs:
+                - identitySelector:
+                    name: application-source
+            - name: nginx-proxy
+              type: ociImage
+              version: 1.25.4
+              relation: external
+              access:
+                type: ociArtifact
+                imageReference: nginx:1.25.4
+            - name: helm-chart
+              type: helmChart
+              relation: local
+              access:
+                type: localBlob
+                localReference: sha256:fa7d95d13bcec2665ec944f005d0d7f28ba92c1fd7c128e9b7347d792ba5f291
+                mediaType: application/x-tar+gzip
+                referenceName: web-app-chart
+            - name: configuration
+              type: json
+              relation: local
+              access:
+                type: localBlob
+                localReference: config.json
+                mediaType: application/json
+          componentReferences:
+            - name: database
+              componentName: github.com/acme.org/postgresql-cluster
+              version: 15.2.0
+              labels:
+                - name: dependency-type
+                  value: runtime
+            - name: redis-cache
+              componentName: github.com/acme.org/redis
+              version: 7.0.5
+              digest:
+                hashAlgorithm: SHA-256
+                normalisationAlgorithm: jsonNormalisation/v1
+                value: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        signatures:
+          - name: acme-signing-authority
+            digest:
+              hashAlgorithm: SHA-256
+              normalisationAlgorithm: jsonNormalisation/v1
+              value: 7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+            signature:
+              algorithm: RSASSA-PSS-SHA256
+              value: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+              mediaType: application/vnd.ocm.signature.rsa
+
+    # Configuration Examples
+    MLPipelineConfiguration:
+      summary: ML Pipeline Configuration
+      description: Configuration for ML training and inference components
+      value:
+        components:
+          - name: github.com/ailab.org/model-training-pipeline
+            version: 4.2.0
+            provider:
+              name: ailab
+              labels:
+                - name: department
+                  value: research
+                - name: cost-center
+                  value: ml-ops
+            labels:
+              - name: gpu-required
+                value: 'true'
+              - name: framework
+                value: pytorch
+            sources:
+              - name: training-scripts
+                type: git
+                input:
+                  type: dir
+                  path: ./ml/training
+                  compress: true
+                  excludeFiles:
+                    - '**/__pycache__/**'
+                    - '*.pyc'
+            resources:
+              - name: trainer-image
+                type: ociImage
+                relation: local
+                input:
+                  type: docker
+                  path: ./docker/trainer
+                  repository: gcr.io/ailab/model-trainer
+                labels:
+                  - name: cuda-version
+                    value: '12.1'
+              - name: base-model
+                type: ociArtifact
+                version: 1.0.0
+                relation: external
+                access:
+                  type: ociArtifact
+                  imageReference: gcr.io/ml-models/bert-base-uncased:v1.0.0
+              - name: training-data
+                type: dataset
+                relation: external
+                access:
+                  type: s3
+                  region: us-west-2
+                  bucket: ailab-datasets
+                  key: nlp/training-v4.2.0.tar.gz
+                  mediaType: application/x-tar+gzip
+            componentReferences:
+              - name: data-preprocessing
+                componentName: github.com/ailab.org/data-pipeline
+                version: 2.1.5
+          - name: github.com/ailab.org/inference-service
+            version: 3.0.1
+            provider: ailab
+            labels:
+              - name: serving-framework
+                value: triton
+            resources:
+              - name: triton-server
+                type: ociImage
+                relation: local
+                input:
+                  type: docker
+                  path: ./docker/triton-custom
+                  repository: gcr.io/ailab/triton-inference
+              - name: model-artifacts
+                type: ociBlob
+                version: 3.0.1
+                relation: local
+                access:
+                  type: ociBlob
+                  imageReference: gcr.io/ailab/model-artifacts
+                  digest: sha256:41029839fa6ad57a33a4fe85a9f7c7127d37e42d6947317488b5de4c5dbeb20e
+                  mediaType: application/x-tar+gzip
+                  size: 524288000
+
+    MicroservicesConfiguration:
+      summary: Microservices Configuration
+      description: Configuration for enterprise microservices
+      value:
+        components:
+          - name: github.com/enterprise.io/order-service
+            version: 3.1.0
+            provider: enterprise
+            labels:
+              - name: service-mesh
+                value: istio
+              - name: tier
+                value: critical
+            sources:
+              - name: service-code
+                type: git
+                input:
+                  type: dir
+                  path: ./services/order-service
+                  compress: true
+                  excludeFiles:
+                    - '*.test.js'
+                    - node_modules/**
+            resources:
+              - name: service-image
+                type: ociImage
+                relation: local
+                input:
+                  type: docker
+                  path: ./services/order-service
+                  repository: ghcr.io/enterprise/order-service
+              - name: api-spec
+                type: openapi
+                relation: local
+                input:
+                  type: file
+                  path: ./api/order-service-v3.yaml
+                  mediaType: application/yaml
+          - name: github.com/enterprise.io/payment-service
+            version: 2.8.3
+            provider:
+              name: enterprise
+              labels:
+                - name: compliance
+                  value: pci-dss
+            resources:
+              - name: payment-processor
+                type: ociImage
+                relation: local
+                input:
+                  type: dockermulti
+                  variants:
+                    - linux/amd64
+                    - linux/arm64
+                  repository: ghcr.io/enterprise/payment-service
+              - name: stripe-sdk
+                type: npmPackage
+                relation: external
+                version: 14.5.0
+                access:
+                  type: npm
+                  registry: https://registry.npmjs.org
+                  package: stripe
+                  version: 14.5.0
+              - name: helm-deployment
+                type: helmChart
+                relation: local
+                input:
+                  type: helm
+                  path: ./charts/payment-service
+                  version: 2.8.3
+
+    # List Response Examples
+    ComponentDescriptorListResponse:
+      summary: Component descriptor list
+      description: Example list of component descriptors
+      value:
+        items:
+          - meta:
+              schemaVersion: v2
+            component:
+              name: github.com/acme.org/web-application
+              version: 2.5.1
+              provider:
+                name: acme
+          - meta:
+              schemaVersion: v2
+            component:
+              name: github.com/ailab.org/model-training-pipeline
+              version: 4.2.0
+              provider:
+                name: ailab
+        total: 2
+        limit: 20
+        offset: 0
+
+    VersionListResponse:
+      summary: Version list
+      description: Example list of component versions
+      value:
+        componentName: github.com/acme.org/web-application
+        versions:
+          - 2.5.1
+          - 2.5.0
+          - 2.4.3
+          - 2.4.2
+          - 2.4.1
+
+    ResourceListResponse:
+      summary: Resource list
+      description: Example list of component resources
+      value:
+        - name: frontend-image
+          type: ociImage
+          version: 2.5.1
+          relation: local
+          access:
+            type: ociArtifact
+            imageReference: ghcr.io/acme-org/web-app-frontend:2.5.1
+        - name: backend-image
+          type: ociImage
+          version: 2.5.1
+          relation: local
+          access:
+            type: ociArtifact
+            imageReference: ghcr.io/acme-org/web-app-backend:2.5.1
+        - name: nginx-proxy
+          type: ociImage
+          version: 1.25.4
+          relation: external
+          access:
+            type: ociArtifact
+            imageReference: nginx:1.25.4
+
+    SourceListResponse:
+      summary: Source list
+      description: Example list of component sources
+      value:
+        - name: application-source
+          type: git
+          version: 2.5.1
+          access:
+            type: gitHub
+            repoUrl: https://github.com/acme-org/web-application
+            commit: a7f8d9e1c2b3a4f5e6d7c8b9a0f1e2d3c4b5a6f7
+        - name: deployment-manifests
+          type: helmChart
+          version: 1.2.0
+          access:
+            type: helm
+            helmRepository: https://charts.acme.org
+            helmChart: web-app:1.2.0
+
+    ComponentReferenceListResponse:
+      summary: Component reference list
+      description: Example list of component references
+      value:
+        - name: database
+          componentName: github.com/acme.org/postgresql-cluster
+          version: 15.2.0
+          labels:
+            - name: dependency-type
+              value: runtime
+        - name: redis-cache
+          componentName: github.com/acme.org/redis
+          version: 7.0.5
+
+    SignatureListResponse:
+      summary: Signature list
+      description: Example list of signatures
+      value:
+        - name: acme-signing-authority
+          digest:
+            hashAlgorithm: SHA-256
+            normalisationAlgorithm: jsonNormalisation/v1
+            value: 7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+          signature:
+            algorithm: RSASSA-PSS-SHA256
+            value: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+            mediaType: application/vnd.ocm.signature.rsa
+
+    ConfigurationListResponse:
+      summary: Configuration list
+      description: Example list of configurations
+      value:
+        items:
+          - components:
+              - name: github.com/ailab.org/model-training-pipeline
+                version: 4.2.0
+                provider: ailab
+          - components:
+              - name: github.com/enterprise.io/order-service
+                version: 3.1.0
+                provider: enterprise
+        total: 2
+
+    # Resource Examples
+    OciImageResource:
+      summary: OCI Image Resource
+      description: Example OCI image resource
+      value:
+        name: frontend-image
+        type: ociImage
+        version: 2.5.1
+        relation: local
+        access:
+          type: ociArtifact
+          imageReference: ghcr.io/acme-org/web-app-frontend:2.5.1@sha256:4f5d0d0684a1ed9f7ce482c87c2c4d3499468fdcea2711f0c3f6a69a7aa9147b
+        labels:
+          - name: component
+            value: frontend
+        digest:
+          hashAlgorithm: SHA-256
+          normalisationAlgorithm: ociArtifactDigest/v1
+          value: 4f5d0d0684a1ed9f7ce482c87c2c4d3499468fdcea2711f0c3f6a69a7aa9147b
+
+    HelmChartResource:
+      summary: Helm Chart Resource
+      description: Example Helm chart resource
+      value:
+        name: helm-chart
+        type: helmChart
+        relation: local
+        access:
+          type: localBlob
+          localReference: sha256:fa7d95d13bcec2665ec944f005d0d7f28ba92c1fd7c128e9b7347d792ba5f291
+          mediaType: application/x-tar+gzip
+          referenceName: web-app-chart
+
+    # Source Examples
+    GitHubSource:
+      summary: GitHub Source
+      description: Example GitHub source
+      value:
+        name: application-source
+        type: git
+        version: 2.5.1
+        access:
+          type: gitHub
+          repoUrl: https://github.com/acme-org/web-application
+          commit: a7f8d9e1c2b3a4f5e6d7c8b9a0f1e2d3c4b5a6f7
+        labels:
+          - name: language
+            value: javascript
+
+    # Component Reference Example
+    ComponentReferenceDatabase:
+      summary: Database Component Reference
+      description: Example component reference to a database
+      value:
+        name: database
+        componentName: github.com/acme.org/postgresql-cluster
+        version: 15.2.0
+        labels:
+          - name: dependency-type
+            value: runtime
+
+    # Signature Examples
+    Signature:
+      summary: Component Signature
+      description: Example component signature
+      value:
+        name: acme-signing-authority
+        digest:
+          hashAlgorithm: SHA-256
+          normalisationAlgorithm: jsonNormalisation/v1
+          value: 7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+        signature:
+          algorithm: RSASSA-PSS-SHA256
+          value: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+          mediaType: application/vnd.ocm.signature.rsa
+
+    SignatureRequest:
+      summary: Signature Request
+      description: Example request to sign a component
+      value:
+        name: acme-signing-authority
+        algorithm: RSASSA-PSS-SHA256
+        privateKey: '-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBg...'
+
+    VerificationRequest:
+      summary: Verification Request
+      description: Example request to verify a signature
+      value:
+        publicKey: '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhki...'
+
+    VerificationResultSuccess:
+      summary: Successful Verification
+      description: Example successful verification result
+      value:
+        verified: true
+        message: Signature verification successful
+        signatureName: acme-signing-authority
+        componentName: github.com/acme.org/web-application
+        version: 2.5.1
+
+    VerificationResultFailed:
+      summary: Failed Verification
+      description: Example failed verification result
+      value:
+        verified: false
+        message: 'Signature verification failed: digest mismatch'
+        signatureName: acme-signing-authority
+        componentName: github.com/acme.org/web-application
+        version: 2.5.1
+
+    # Transfer Examples
+    TransferRequest:
+      summary: Transfer Request
+      description: Example request to transfer components
+      value:
+        components:
+          - name: github.com/acme.org/web-application
+            version: 2.5.1
+        sourceRepository:
+          type: ociRegistry
+          baseUrl: ghcr.io/acme
+          componentNameMapping: urlPath
+        targetRepository:
+          type: ociRegistry
+          baseUrl: registry.internal.company.com/ocm
+          componentNameMapping: urlPath
+        recursive: true
+
+    TransferResult:
+      summary: Transfer Result
+      description: Example transfer result
+      value:
+        status: completed
+        transferId: tr-abc123def456
+        componentsTransferred: 3
+        message: Successfully transferred 3 components including dependencies
+
+    # Error Examples
+    ErrorBadRequest:
+      summary: Bad Request Error
+      description: Example bad request error
+      value:
+        code: BAD_REQUEST
+        message: Invalid component name format
+        details:
+          field: component.name
+          pattern: ^[a-z][-a-z0-9]*([.][a-z][-a-z0-9]*)*[.][a-z]{2,}(/[a-z][-a-z0-9_]*([.][a-z][-a-z0-9_]*)*)+$
+
+    ErrorNotFound:
+      summary: Not Found Error
+      description: Example not found error
+      value:
+        code: NOT_FOUND
+        message: Component 'github.com/acme.org/unknown-component' not found
+
+    ErrorConflict:
+      summary: Conflict Error
+      description: Example conflict error
+      value:
+        code: CONFLICT
+        message: Component 'github.com/acme.org/web-application' version '2.5.1' already exists
+
+    ErrorInternal:
+      summary: Internal Error
+      description: Example internal server error
+      value:
+        code: INTERNAL_ERROR
+        message: An unexpected error occurred
+        details:
+          requestId: req-xyz789
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT-based authentication
+
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key authentication
+
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.ocm.example.com/.well-known/openid-configuration
+      description: OpenID Connect authentication
+
+security:
+  - bearerAuth: []
+  - apiKey: []

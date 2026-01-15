@@ -6,9 +6,33 @@ description: |-
 tags:
   - Applications
 created: '2025-12-17'
-modified: '2025-12-17'
+modified: '2026-01-15'
 url: https://github.com/naftiko-capabilities/applications/blob/main/indexes/score.yml
 specificationVersion: '0.19'
+
+apis:
+
+- aid: score:score
+  name: Score Sandbox API
+  description: This is meant to provide a sandbox for the specification.
+  humanURL: https://github.com/naftiko-capabilities/applications/
+  baseURL: http://localhost:8080/rest/
+  tags:
+    - Applications
+    - Sandbox
+  properties:
+
+    - type: Documentation
+      url: https://github.com/naftiko-capabilities/applications/
+    - type: OpenAPI
+      url: https://github.com/naftiko-capabilities/applications/blob/main/openapi/cloud-native-application-bundle-openapi.yml
+
+    - type: Examples
+      url: https://github.com/naftiko-capabilities/applications/blob/main/examples/score-ai-ml-inference-platform.yml
+    - type: Examples
+      url: https://github.com/naftiko-capabilities/applications/blob/main/examples/score-data-processing-pipeline.yml
+    - type: Examples
+      url: https://github.com/naftiko-capabilities/applications/blob/main/examples/score-ecommerce.yml
 
 common:
 
@@ -58,4 +82,4 @@ common:
 maintainers:
 
   - FN: Kin Lane
-    email: info@apievangelist.com
+    email: kinlane@naftiko.io

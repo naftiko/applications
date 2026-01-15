@@ -6,12 +6,12 @@ description: |-
 tags:
   - Applications
 created: '2025-12-17'
-modified: '2025-12-17'
+modified: '2026-01-15'
 url: https://github.com/naftiko-capabilities/applications/blob/main/indexes/radius.yml
 specificationVersion: '0.19'
 apis:
 
-  - aid: radius
+  - aid: radius:radius
     name: Radius API
     description: An API for the Radius specification.
     humanURL: https://docs.radapp.io/reference/api/
@@ -20,6 +20,28 @@ apis:
     properties:
       - type: Documentation
         url: https://docs.radapp.io/reference/api/
+          
+  - aid: radius:radius-sandbox
+    name: Cloud Native Application Bundle Sandbox API
+    description: This is meant to provide a sandbox for the specification.
+    humanURL: https://github.com/naftiko-capabilities/applications/
+    baseURL: http://localhost:8080/rest/
+    tags:
+      - Applications
+      - Sandbox
+    properties:
+
+      - type: Documentation
+        url: https://github.com/naftiko-capabilities/applications/
+      - type: OpenAPI
+        url: https://github.com/naftiko-capabilities/applications/blob/main/openapi/cloud-native-application-bundle-openapi.yml
+
+      - type: Examples
+        url: https://github.com/naftiko-capabilities/applications/blob/main/examples/radius-ecommerce-microservice.yml
+      - type: Examples
+        url: https://github.com/naftiko-capabilities/applications/blob/main/examples/radius-iot-data-processing.yml
+      - type: Examples
+        url: https://github.com/naftiko-capabilities/applications/blob/main/examples/radius-multi-cloud-ci-cd-platform.yml
 
 common:
 

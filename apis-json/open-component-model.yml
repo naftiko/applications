@@ -6,9 +6,37 @@ description: |-
 tags:
   - Applications
 created: '2025-12-17'
-modified: '2025-12-17'
+modified: '2026-01-15'
 url: https://github.com/naftiko-capabilities/applications/blob/main/indexes/open-component-model.yml
 specificationVersion: '0.19'
+
+apis:
+
+- aid: cloud-native-application-bundle:cloud-native-application-bundle
+  name: Cloud Native Application Bundle Sandbox API
+  description: This is meant to provide a sandbox for the specification.
+  humanURL: https://github.com/naftiko-capabilities/applications/
+  baseURL: http://localhost:8080/rest/
+  tags:
+    - Applications
+    - Sandbox
+  properties:
+
+    - type: Documentation
+      url: https://github.com/naftiko-capabilities/applications/
+    - type: OpenAPI
+      url: https://github.com/naftiko-capabilities/applications/blob/main/openapi/cloud-native-application-bundle-openapi.yml
+
+    - type: Examples
+      url: https://github.com/naftiko-capabilities/applications/blob/main/examples/open-component-model model-training-pipelines.yml
+    - type: Examples
+      url: https://github.com/naftiko-capabilities/applications/blob/main/examples/open-component-model-example-web-application.yml
+    - type: Examples
+      url: https://github.com/naftiko-capabilities/applications/blob/main/examples/open-component-model-order-microservice.yml
+
+  contact:
+    - FN: Kin Lane
+      email: kinlane@naftiko.io
 
 common:
 
@@ -52,6 +80,6 @@ common:
 maintainers:
 
   - FN: Kin Lane
-    email: info@apievangelist.com
+    email: kinlane@naftiko.io
 
 
